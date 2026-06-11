@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Astonpoliz';
+  src: url('./assets/Astonpoliz.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Forzamos que el h1 use tu fuente original */
+h1 {
+  font-family: 'Astonpoliz', sans-serif !important;
+}
