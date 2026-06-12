@@ -7,7 +7,7 @@ import Automation from './components/Automation';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen text-white isolate">
       <InteractiveBackground />
       <main className="relative z-10">
         <MetaSection />
