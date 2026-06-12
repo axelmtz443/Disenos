@@ -6,9 +6,7 @@ export default function AutomationSection() {
   const [activeFeature, setActiveFeature] = useState<number>(0);
 
   return (
-    <section id="automatizacion" className="relative min-h-screen py-24 bg-[#0a0a0a] overflow-hidden">
-      <div className="absolute top-1/4 left-1/3 w-125 h-125 rounded-full blur-[120px] pointer-events-none opacity-20" style={{ backgroundColor: COLORS.automation }} />
-      <div className="absolute bottom-1/3 right-1/4 w-100 h-100 rounded-full blur-[120px] pointer-events-none opacity-15" style={{ backgroundColor: COLORS.automation }} />
+    <section id="automatizacion" className="relative min-h-screen py-24 overflow-hidden">
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         <div className="mb-12">
@@ -26,7 +24,7 @@ export default function AutomationSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="grid sm:grid-cols-2 gap-4">
             {FEATURES.map((feature, idx) => (
-              <button key={feature.id} onClick={() => setActiveFeature(idx)} className={`relative p-6 rounded-2xl border text-left transition-all duration-300 ${activeFeature === idx ? 'bg-zinc-900 shadow-lg' : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'}`} style={activeFeature === idx ? { borderColor: 'rgba(128, 182, 125, 0.5)', boxShadow: '0 10px 30px rgba(128, 182, 125, 0.1)' } : {}}>
+              <button key={feature.id} onClick={() => setActiveFeature(idx)} className={`relative p-6 rounded-2xl border text-left transition-all duration-300 ${activeFeature === idx ? 'bg-zinc-900/90 backdrop-blur-sm shadow-lg' : 'bg-zinc-900/60 backdrop-blur-sm border-zinc-700/50 hover:border-zinc-600'}`} style={activeFeature === idx ? { borderColor: 'rgba(128, 182, 125, 0.5)', boxShadow: '0 10px 30px rgba(128, 182, 125, 0.1)' } : {}}>
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors ${activeFeature === idx ? 'text-white' : ''}`} style={{ backgroundColor: activeFeature === idx ? COLORS.automation : '#27272a', color: activeFeature === idx ? '#fff' : COLORS.automation }}>
                   {getIcon(feature.icon)}
                 </div>
@@ -37,7 +35,7 @@ export default function AutomationSection() {
           </div>
 
           <div className="sticky top-8">
-            <div className="rounded-3xl border p-8 lg:p-10" style={{ background: 'linear-gradient(135deg, rgba(128, 182, 125, 0.1), rgba(128, 182, 125, 0.05))', borderColor: 'rgba(128, 182, 125, 0.2)' }}>
+            <div className="rounded-3xl border p-8 lg:p-10 backdrop-blur-sm" style={{ background: 'linear-gradient(135deg, rgba(128, 182, 125, 0.1), rgba(128, 182, 125, 0.05))', borderColor: 'rgba(128, 182, 125, 0.3)' }}>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white" style={{ background: 'linear-gradient(135deg, #80b67d, #6a9d68)' }}>
                   {getIcon(FEATURES[activeFeature].icon)}
@@ -70,7 +68,7 @@ export default function AutomationSection() {
 
         <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
           {STATS.map((stat, idx) => (
-            <div key={idx} className="text-center p-6 bg-zinc-900/50 rounded-xl border border-zinc-800">
+            <div key={idx} className="text-center p-6 bg-zinc-900/60 backdrop-blur-sm rounded-xl border border-zinc-700/50">
               <p className="text-3xl lg:text-4xl font-bold text-white mb-2" style={{ fontFamily: FONTS.heading }}>{stat.value}</p>
               <p className="text-sm text-zinc-500" style={{ fontFamily: FONTS.body }}>{stat.label}</p>
             </div>
