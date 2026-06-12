@@ -12,8 +12,8 @@ export interface Campaign {
 export const CAMPAIGNS: Campaign[] = [
   {
     id: 1,
-    influencer: "María González",
-    handle: "@mariaestilo",
+    influencer: "CBR",
+    handle: "@CBR",
     followers: "1.2M",
     niche: "Lifestyle & Moda",
     profilePic: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150",
