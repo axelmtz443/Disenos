@@ -748,7 +748,7 @@ export default function App() {
         <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-3 leading-[1.1]" style={{ fontFamily: "'Astonpoliz', sans-serif" }}>
-            Ecosistema <br/>
+            Publicidad en <br/>
             <span className="text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">Google Ads</span>
           </h1>
           
