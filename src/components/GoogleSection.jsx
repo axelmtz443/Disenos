@@ -1,197 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { ImageWithFallback, COLORS, FONTS } from '../lib/utils';
+import { ADS_DATABASE } from '../data/googleData';
 
-// --- Interfaces de Tipado ---
-
-type AdType = 'search' | 'display' | 'shopping' | 'video';
-
-interface ActionExtension {
-  title: string;
-  subtitle: string;
-}
-
-interface ShoppingProduct {
-  image: string;
-  title: string;
-  price: string;
-  store: string;
-  promo?: string;
-  rating?: number;
-  reviews?: number;
-}
-
-interface Ad {
-  id: string;
-  type: AdType;
-  
-  // Campos Base
-  title: string;
-  pageLogo?: string;
-  
-  // Específicos de Search
-  pageName?: string;
-  displayUrl?: string;
-  description?: string;
-  whatsappAction?: ActionExtension;
-  stackedSitelinks?: string[];
-  tags?: string[];
-  formExtension?: ActionExtension;
-  
-  // Específicos de Display (Skyscraper)
-  displayBgColor?: string;
-  displaySubtext?: string;
-  displayImageUrl?: string;
-  ctaText?: string;
-  finePrint?: string;
-  
-  // Específicos de Shopping
-  products?: ShoppingProduct[];
-  
-  // Específicos de Video
-  videoThumbnail?: string;
-  duration?: string;
-  channelName?: string;
-  views?: string;
-  sponsorLabel?: string;
-}
-
-interface ImageWithFallbackProps {
-  src: string;
-  fallback: string;
-  alt: string;
-  className?: string;
-}
-
-interface AdComponentProps {
-  ad: Ad;
-}
-
-// --- Base de Datos Extendida ---
-
-const ADS_DATABASE: Ad[] = [
-  {
-    id: "search-alteso",
-    type: "search",
-    pageName: "Alteso",
-    displayUrl: "www.alteso.mx/plantas_de_gas",
-    pageLogo: "https://ui-avatars.com/api/?name=Alteso&background=f8f9fa&color=202124&font-size=0.5",
-    title: "Venta de Plantas de Luz a Gas - Te Cotizamos en 24 Horas",
-    description: "Nuestros Equipos de última generación generan menos emisiones de CO2 sin afectar rendimiento o potencia",
-    tags: ["Plantas de Diesel", "Plantas de Gasolina", "Plantas de..."],
-    formExtension: {
-      title: "Pide presupuesto",
-      subtitle: "Tenemos todas las marcas"
-    }
-  },
-  {
-    id: "shopping-tech",
-    type: "shopping",
-    title: "Resultados de Shopping",
-    products: [
-      {
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=300",
-        title: "Auriculares Inalámbricos Pro Max Noise Cancelling",
-        price: "$4,599.00",
-        store: "TechStore MX",
-        promo: "Envío gratis",
-        rating: 4.8,
-        reviews: 124
-      },
-      {
-        image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=300",
-        title: "Smartwatch Deportivo Serie 8 GPS + Celular",
-        price: "$6,200.00",
-        store: "ElectroCity",
-        promo: "Rebaja especial",
-        rating: 4.5,
-        reviews: 89
-      },
-      {
-        image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=300",
-        title: "Audífonos Studio Wireless Over-Ear V2",
-        price: "$3,850.00",
-        store: "AudioMundo",
-        rating: 4.2,
-        reviews: 45
-      },
-      {
-        image: "https://images.unsplash.com/photo-1572569433114-6b0c20ab0e39?auto=format&fit=crop&q=80&w=300",
-        title: "Reloj Inteligente Minimalist Negro",
-        price: "$1,999.00",
-        store: "GadgetMX",
-        promo: "Envío gratis",
-      }
-    ]
-  },
-  {
-    id: "video-promo",
-    type: "video",
-    title: "Domina tus Finanzas con esta Nueva Herramienta en 2026",
-    videoThumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=600",
-    duration: "1:12",
-    channelName: "Finanzas Prácticas",
-    views: "1.2 M de vistas",
-    sponsorLabel: "Patrocinado",
-    description: "Descubre el software definitivo para automatizar tu contabilidad y multiplicar tus ahorros. Haz clic para probarlo gratis."
-  },
-  {
-    id: "display-horizontal", // Actualicé el ID para que tenga más sentido
-    type: "display",
-    title: "Nueva Colección Verano",
-    displaySubtext: "Hasta 50% de descuento en artículos seleccionados. Solo por tiempo limitado.",
-    // Nueva imagen apaisada que se adapta perfecto al formato in-article
-    displayImageUrl: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=800)",
-    displayBgColor: "#ffffff",
-    ctaText: "Comprar Ahora",
-    finePrint: "*Aplican términos y condiciones. Válido hasta agotar existencias.",
-    pageLogo: "https://ui-avatars.com/api/?name=F&background=000&color=fff&font-size=0.6"
-  } 
-];
-
-// --- Sub-Componentes Base ---
-
-function ImageWithFallback({ src, fallback, alt, className }: ImageWithFallbackProps) {
-  const [imgSrc, setImgSrc] = useState<string>(src);
-  const [hasFailed, setHasFailed] = useState<boolean>(false);
-
-  return (
-    <img 
-      src={imgSrc} 
-      alt={alt} 
-      className={className}
-      onError={() => {
-        if (!hasFailed) {
-          setImgSrc(fallback);
-          setHasFailed(true);
-        }
-      }}
-    />
-  );
-}
-
-// --- Componentes Publicitarios ---
-
-/* 1. Google Search (Texto con Sitelinks) */
-function GoogleSearchAd({ ad }: AdComponentProps) {
-  // Generamos un término de búsqueda simulado basado en el anuncio para darle más realismo
+function GoogleSearchAd({ ad }) {
   const dummySearchQuery = ad.tags?.[0] || ad.title.split('-')[0].trim() || ad.pageName;
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Título Descriptivo del Formato */}
       <div className="text-center mb-6 px-4">
         <h3 className="text-xl md:text-2xl font-bold text-white mb-1.5">Red de Búsqueda (Search)</h3>
         <p className="text-[14px] text-zinc-400 font-light">Aparece en los primeros resultados de texto en el buscador de Google.</p>
       </div>
 
-      {/* Ventana Simuladora de Búsqueda de Google */}
       <div className="w-[600px] max-w-full bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
-        
-        {/* Cabecera de Búsqueda (Logo, Barra y Pestañas) */}
         <div className="border-b border-gray-200 bg-white pt-5">
-          
-          {/* Fila del buscador */}
           <div className="flex items-center px-4 md:px-6 mb-4">
-            {/* Logo de Google (Estilo tipográfico) */}
             <div className="flex font-sans text-2xl font-medium tracking-tighter mr-5 select-none">
               <span className="text-[#4285F4]">G</span>
               <span className="text-[#EA4335]">o</span>
@@ -200,28 +23,14 @@ function GoogleSearchAd({ ad }: AdComponentProps) {
               <span className="text-[#34A853]">l</span>
               <span className="text-[#EA4335]">e</span>
             </div>
-            
-            {/* Barra de Búsqueda Pill */}
             <div className="flex-1 flex items-center bg-white border border-gray-200 hover:shadow-md transition-shadow duration-200 rounded-full px-4 py-2 shadow-sm">
               <span className="text-[#202124] text-[15px] flex-1 truncate font-medium">{dummySearchQuery}</span>
-              
               <div className="flex items-center space-x-3 text-gray-500 ml-2 border-l border-gray-200 pl-3">
-                {/* Icono Micrófono */}
-                <svg className="w-5 h-5 cursor-pointer" viewBox="0 0 24 24">
-                  <path fill="#4285f4" d="m12 15c1.66 0 3-1.31 3-2.97v-7.02c0-1.66-1.34-3.01-3-3.01s-3 1.34-3 3.01v7.02c0 1.66 1.34 2.97 3 2.97z"/>
-                  <path fill="#34a853" d="m11 18.08h2v3.92h-2z"/>
-                  <path fill="#fbbc04" d="m7.05 16.87c-1.27-1.33-2.05-2.8-2.05-4.67h2c0 1.45.56 2.42 1.47 3.38v.32l-1.15 1.18z"/>
-                  <path fill="#ea4335" d="m12 16.93a4.97 5.25 0 0 1 -3.54 -1.55l-1.41 1.49c1.26 1.34 3.02 2.13 4.95 2.13 3.87 0 6.99-2.92 6.99-7h-1.99c0 2.92-2.24 4.93-5 4.93z"/>
-                </svg>
-                {/* Icono Lupa */}
-                <svg className="w-5 h-5 text-[#4285F4] cursor-pointer" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
+                <svg className="w-5 h-5 cursor-pointer" viewBox="0 0 24 24"><path fill="#4285f4" d="m12 15c1.66 0 3-1.31 3-2.97v-7.02c0-1.66-1.34-3.01-3-3.01s-3 1.34-3 3.01v7.02c0 1.66 1.34 2.97 3 2.97z"/><path fill="#34a853" d="m11 18.08h2v3.92h-2z"/><path fill="#fbbc04" d="m7.05 16.87c-1.27-1.33-2.05-2.8-2.05-4.67h2c0 1.45.56 2.42 1.47 3.38v.32l-1.15 1.18z"/><path fill="#ea4335" d="m12 16.93a4.97 5.25 0 0 1 -3.54 -1.55l-1.41 1.49c1.26 1.34 3.02 2.13 4.95 2.13 3.87 0 6.99-2.92 6.99-7h-1.99c0 2.92-2.24 4.93-5 4.93z"/></svg>
+                <svg className="w-5 h-5 text-[#4285F4] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
               </div>
             </div>
           </div>
-
-          {/* Menú de Pestañas */}
           <div className="flex items-center px-4 md:px-6 space-x-6 text-[13px] text-[#5f6368] overflow-x-auto hide-scrollbar">
             <div className="flex items-center space-x-1.5 pb-2.5 border-b-2 border-[#1a73e8] text-[#1a73e8] font-medium cursor-pointer">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
@@ -242,26 +51,18 @@ function GoogleSearchAd({ ad }: AdComponentProps) {
           </div>
         </div>
 
-        {/* Estadísticas de búsqueda orgánicas */}
         <div className="px-4 md:px-8 pt-3 pb-4 text-[13px] text-[#70757a]">
           Cerca de 2,450,000 resultados (0.34 segundos)
         </div>
 
-        {/* Zona del Anuncio Orgánico */}
         <div className="px-4 md:px-8 pb-8 relative group">
-          
           <button className="absolute top-0 right-4 md:right-8 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition opacity-0 group-hover:opacity-100">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
           </button>
 
           <div className="flex items-center space-x-3 mb-3">
             <div className="w-7 h-7 rounded-full border border-gray-200 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center">
-              <ImageWithFallback 
-                src={ad.pageLogo || ''} 
-                fallback={`https://ui-avatars.com/api/?name=${encodeURIComponent(ad.pageName || 'A')}&background=f3f4f6&color=000`}
-                alt={ad.pageName || 'Logo'}
-                className="w-full h-full object-cover"
-              />
+              <ImageWithFallback src={ad.pageLogo || ''} fallback={`https://ui-avatars.com/api/?name=${encodeURIComponent(ad.pageName || 'A')}&background=f3f4f6&color=000`} alt={ad.pageName || 'Logo'} className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-[14px] text-[#202124] font-medium truncate">{ad.pageName}</span>
@@ -269,17 +70,10 @@ function GoogleSearchAd({ ad }: AdComponentProps) {
             </div>
           </div>
 
-          <div className="text-[14px] font-bold text-[#202124] mb-1.5 flex items-center">
-            Patrocinado
-          </div>
+          <div className="text-[14px] font-bold text-[#202124] mb-1.5 flex items-center">Patrocinado</div>
 
-          <h3 className="text-[20px] text-[#1a0dab] font-normal hover:underline cursor-pointer mb-2 leading-snug break-words">
-            {ad.title}
-          </h3>
-
-          <p className="text-[14px] text-[#4d5156] leading-[1.58] mb-0">
-            {ad.description}
-          </p>
+          <h3 className="text-[20px] text-[#1a0dab] font-normal hover:underline cursor-pointer mb-2 leading-snug break-words">{ad.title}</h3>
+          <p className="text-[14px] text-[#4d5156] leading-[1.58] mb-0">{ad.description}</p>
 
           {ad.whatsappAction && (
             <div className="mt-4 flex items-center w-full bg-white border border-gray-300 rounded-full px-5 py-3 hover:bg-gray-50 transition cursor-pointer group">
@@ -308,9 +102,7 @@ function GoogleSearchAd({ ad }: AdComponentProps) {
           {ad.tags && (
             <div className="flex flex-nowrap overflow-hidden gap-2 mt-4 -mx-1 px-1">
               {ad.tags.map((tag, i) => (
-                <div key={i} className="whitespace-nowrap px-4 py-2 bg-white border border-gray-300 rounded-full text-[14px] text-[#1a0dab] hover:bg-gray-50 transition cursor-pointer">
-                  {tag}
-                </div>
+                <div key={i} className="whitespace-nowrap px-4 py-2 bg-white border border-gray-300 rounded-full text-[14px] text-[#1a0dab] hover:bg-gray-50 transition cursor-pointer">{tag}</div>
               ))}
             </div>
           )}
@@ -324,38 +116,27 @@ function GoogleSearchAd({ ad }: AdComponentProps) {
               </div>
             </div>
           )}
-
         </div>
 
-        {/* Separador inferior simulando continuación de resultados */}
         <div className="w-full h-8 bg-gradient-to-b from-white to-gray-50 border-t border-gray-100"></div>
       </div>
     </div>
   );
 }
 
-/* 2. Google Shopping (Carrusel Horizontal en Ventana de Búsqueda) */
-function GoogleShoppingAd({ ad }: AdComponentProps) {
-  // Generamos un término de búsqueda simulado basado en el primer producto o un texto genérico
+function GoogleShoppingAd({ ad }) {
   const dummySearchQuery = ad.products?.[0]?.title.split(' ').slice(0, 3).join(' ') || "comprar en línea";
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Título Descriptivo del Formato */}
       <div className="text-center mb-6 px-4">
         <h3 className="text-xl md:text-2xl font-bold text-white mb-1.5">Google Shopping</h3>
         <p className="text-[14px] text-zinc-400 font-light">Muestra productos directos con imagen y precio en la cima de los resultados de búsqueda.</p>
       </div>
 
-      {/* Ventana Simuladora de Búsqueda de Google */}
       <div className="w-[600px] max-w-full bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
-        
-        {/* Cabecera de Búsqueda (Logo, Barra y Pestañas) */}
         <div className="border-b border-gray-200 bg-white pt-5">
-          
-          {/* Fila del buscador */}
           <div className="flex items-center px-4 md:px-6 mb-4">
-            {/* Logo de Google */}
             <div className="flex font-sans text-2xl font-medium tracking-tighter mr-5 select-none">
               <span className="text-[#4285F4]">G</span>
               <span className="text-[#EA4335]">o</span>
@@ -364,34 +145,19 @@ function GoogleShoppingAd({ ad }: AdComponentProps) {
               <span className="text-[#34A853]">l</span>
               <span className="text-[#EA4335]">e</span>
             </div>
-            
-            {/* Barra de Búsqueda Pill */}
             <div className="flex-1 flex items-center bg-white border border-gray-200 hover:shadow-md transition-shadow duration-200 rounded-full px-4 py-2 shadow-sm">
               <span className="text-[#202124] text-[15px] flex-1 truncate font-medium">{dummySearchQuery}</span>
-              
               <div className="flex items-center space-x-3 text-gray-500 ml-2 border-l border-gray-200 pl-3">
-                {/* Icono Micrófono */}
-                <svg className="w-5 h-5 cursor-pointer" viewBox="0 0 24 24">
-                  <path fill="#4285f4" d="m12 15c1.66 0 3-1.31 3-2.97v-7.02c0-1.66-1.34-3.01-3-3.01s-3 1.34-3 3.01v7.02c0 1.66 1.34 2.97 3 2.97z"/>
-                  <path fill="#34a853" d="m11 18.08h2v3.92h-2z"/>
-                  <path fill="#fbbc04" d="m7.05 16.87c-1.27-1.33-2.05-2.8-2.05-4.67h2c0 1.45.56 2.42 1.47 3.38v.32l-1.15 1.18z"/>
-                  <path fill="#ea4335" d="m12 16.93a4.97 5.25 0 0 1 -3.54 -1.55l-1.41 1.49c1.26 1.34 3.02 2.13 4.95 2.13 3.87 0 6.99-2.92 6.99-7h-1.99c0 2.92-2.24 4.93-5 4.93z"/>
-                </svg>
-                {/* Icono Lupa */}
-                <svg className="w-5 h-5 text-[#4285F4] cursor-pointer" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
+                <svg className="w-5 h-5 cursor-pointer" viewBox="0 0 24 24"><path fill="#4285f4" d="m12 15c1.66 0 3-1.31 3-2.97v-7.02c0-1.66-1.34-3.01-3-3.01s-3 1.34-3 3.01v7.02c0 1.66 1.34 2.97 3 2.97z"/><path fill="#34a853" d="m11 18.08h2v3.92h-2z"/><path fill="#fbbc04" d="m7.05 16.87c-1.27-1.33-2.05-2.8-2.05-4.67h2c0 1.45.56 2.42 1.47 3.38v.32l-1.15 1.18z"/><path fill="#ea4335" d="m12 16.93a4.97 5.25 0 0 1 -3.54 -1.55l-1.41 1.49c1.26 1.34 3.02 2.13 4.95 2.13 3.87 0 6.99-2.92 6.99-7h-1.99c0 2.92-2.24 4.93-5 4.93z"/></svg>
+                <svg className="w-5 h-5 text-[#4285F4] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
               </div>
             </div>
           </div>
-
-          {/* Menú de Pestañas */}
           <div className="flex items-center px-4 md:px-6 space-x-6 text-[13px] text-[#5f6368] overflow-x-auto hide-scrollbar">
             <div className="flex items-center space-x-1.5 pb-2.5 border-b-2 border-[#1a73e8] text-[#1a73e8] font-medium cursor-pointer">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
               <span>Todo</span>
             </div>
-            {/* Pestaña Shopping */}
             <div className="flex items-center space-x-1.5 pb-2.5 hover:text-[#1a0dab] cursor-pointer">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.55 13c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2h7.45zM6.16 6h12.15l-2.76 5h-7.02L6.16 6zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
               <span>Shopping</span>
@@ -407,15 +173,11 @@ function GoogleShoppingAd({ ad }: AdComponentProps) {
           </div>
         </div>
 
-        {/* Estadísticas de búsqueda orgánicas */}
         <div className="px-4 md:px-8 pt-3 pb-2 text-[13px] text-[#70757a]">
           Cerca de 1,120,000 resultados (0.42 segundos)
         </div>
 
-        {/* Zona del Anuncio Shopping */}
         <div className="px-4 md:px-8 pb-8 relative group">
-          
-          {/* Etiqueta superior "Patrocinado" típica de Shopping */}
           <div className="flex items-center mb-3">
             <span className="text-[13px] font-bold text-[#202124]">Patrocinado</span>
             <div className="ml-1.5 cursor-pointer text-gray-500 hover:text-gray-700">
@@ -423,7 +185,6 @@ function GoogleShoppingAd({ ad }: AdComponentProps) {
             </div>
           </div>
 
-          {/* Contenedor del Carrusel Shopping */}
           <div className="relative flex items-center w-full">
             <div className="flex space-x-3 overflow-x-auto w-full hide-scrollbar pb-3 pt-1 px-1 -mx-1">
               {ad.products?.map((p, i) => (
@@ -435,7 +196,6 @@ function GoogleShoppingAd({ ad }: AdComponentProps) {
                     <span className="text-[13px] text-[#1a0dab] font-medium leading-[1.3] line-clamp-2 group-hover:underline h-[34px]">{p.title}</span>
                     <span className="text-[16px] font-bold text-[#202124] mt-2 tracking-tight">{p.price}</span>
                     <span className="text-[12px] text-[#4d5156] mt-1 truncate w-full">{p.store}</span>
-                    
                     <div className="flex items-center space-x-1 mt-1.5 h-4">
                       {p.rating && (
                         <div className="flex items-center text-[#fbbc04]">
@@ -444,47 +204,35 @@ function GoogleShoppingAd({ ad }: AdComponentProps) {
                         </div>
                       )}
                     </div>
-                    {/* Badge Promocional Verde Estilo Google */}
                     {p.promo && <span className="text-[11px] font-medium text-[#137333] mt-2 bg-[#e6f4ea] px-1.5 py-0.5 rounded-sm">{p.promo}</span>}
                   </div>
                 </div>
               ))}
             </div>
-            
-            {/* Botón flotante para scrollear (simulado visualmente) */}
             <button className="absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 bg-white border border-gray-200 rounded-full shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-lg transition z-10 translate-x-3">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
             </button>
           </div>
-
         </div>
 
-        {/* Separador inferior simulando continuación de resultados orgánicos */}
         <div className="w-full h-8 bg-gradient-to-b from-white to-gray-50 border-t border-gray-100"></div>
       </div>
     </div>
   );
 }
 
-/* 3. Google Video (In-Feed YouTube) */
-function GoogleVideoAd({ ad }: AdComponentProps) {
-  // Generamos un término de búsqueda simulado basado en el anuncio
+function GoogleVideoAd({ ad }) {
   const dummySearchQuery = "Mejorar mis ventas";
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Título Descriptivo del Formato */}
       <div className="text-center mb-6 px-4">
         <h3 className="text-xl md:text-2xl font-bold text-white mb-1.5">Anuncios de Video (YouTube)</h3>
         <p className="text-[14px] text-zinc-400 font-light">Aparece primero en los resultados y recomendaciones de YouTube.</p>
       </div>
 
-      {/* Ventana Simuladora de YouTube */}
       <div className="w-[600px] max-w-full bg-[#f9f9f9] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
-        
-        {/* Barra Superior (Header de YouTube) */}
         <div className="flex items-center justify-between px-4 py-2 bg-white">
-          {/* Menu Hamburgesa y Logo */}
           <div className="flex items-center space-x-4">
             <svg className="w-5 h-5 text-[#0f0f0f] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M21 6H3V5h18v1zm0 5H3v1h18v-1zm0 6H3v1h18v-1z"/></svg>
             <div className="flex items-center tracking-tighter text-[18px] font-bold text-[#0f0f0f] cursor-pointer">
@@ -494,8 +242,6 @@ function GoogleVideoAd({ ad }: AdComponentProps) {
               YouTube
             </div>
           </div>
-
-          {/* Barra de Búsqueda de YouTube */}
           <div className="hidden sm:flex items-center flex-1 max-w-[300px] mx-4">
             <div className="flex w-full border border-[#cccccc] rounded-l-full overflow-hidden bg-white px-3 py-1.5 shadow-inner">
               <span className="text-[#0f0f0f] text-[15px] flex-1 truncate font-normal outline-none">{dummySearchQuery}</span>
@@ -503,22 +249,14 @@ function GoogleVideoAd({ ad }: AdComponentProps) {
             <button className="bg-[#f8f8f8] border border-l-0 border-[#cccccc] rounded-r-full px-4 py-1.5 hover:bg-[#f0f0f0] transition">
               <svg className="w-5 h-5 text-[#0f0f0f]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.87 20.17l-5.59-5.59C16.35 13.35 17 11.75 17 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.75 0 3.35-.65 4.58-1.71l5.59 5.59.7-.7zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
             </button>
-            <button className="ml-3 w-9 h-9 rounded-full bg-[#f2f2f2] hover:bg-[#e5e5e5] flex items-center justify-center transition">
-              <svg className="w-5 h-5 text-[#0f0f0f]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-1.66 0-3 1.37-3 3.07v5.86c0 1.7 1.34 3.07 3 3.07s3-1.37 3-3.07V6.07C15 4.37 13.66 3 12 3zm6.5 9h-1c0 3.03-2.47 5.5-5.5 5.5S6.5 15.03 6.5 12h-1c0 3.24 2.39 5.93 5.5 6.41V21h2v-2.59c3.11-.48 5.5-3.17 5.5-6.41z"/></svg>
-            </button>
           </div>
-
-          {/* Iconos de Usuario */}
           <div className="flex items-center space-x-3 text-[#0f0f0f]">
             <svg className="w-5 h-5 cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2zm3-7H3v12h14v-6.39l4 1.83V8.56l-4 1.83V6m1-1v3.83L22 7v8l-4-1.83V19H2V5h16z"/></svg>
             <svg className="w-5 h-5 cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-1.42 1.49-2.5 2.99-1.76.65.32 1.01 1.03 1.01 1.76v.39c2.44.75 4 3.06 4 5.98v5.15l2 1.87zM12 5.5c-2.4 0-4.44 1.55-4.9 3.86L7.02 9.57l-.35-.61c.65-2.91 3.24-4.96 6.33-4.96v1.5z"/></svg>
-            <div className="w-7 h-7 rounded-full bg-[#3EA6FF] flex items-center justify-center text-white text-xs font-medium cursor-pointer">
-              U
-            </div>
+            <div className="w-7 h-7 rounded-full bg-[#3EA6FF] flex items-center justify-center text-white text-xs font-medium cursor-pointer">U</div>
           </div>
         </div>
 
-        {/* Píldoras de Filtro (Chips) */}
         <div className="flex space-x-3 px-4 py-3 bg-white border-b border-gray-200 overflow-x-hidden border-t">
           <span className="bg-[#0f0f0f] text-white px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer transition">Todo</span>
           <span className="bg-[#f2f2f2] hover:bg-[#e5e5e5] text-[#0f0f0f] px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer transition">{dummySearchQuery}</span>
@@ -526,34 +264,24 @@ function GoogleVideoAd({ ad }: AdComponentProps) {
           <span className="bg-[#f2f2f2] hover:bg-[#e5e5e5] text-[#0f0f0f] px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer transition">Novedades</span>
         </div>
 
-        {/* Zona del Anuncio Video (In-Feed) */}
         <div className="px-4 md:px-6 py-5 relative bg-[#f9f9f9]">
           <div className="w-full flex flex-col md:flex-row gap-4 text-left cursor-pointer group">
-            
-            {/* Miniatura del Video */}
             <div className="w-full md:w-[260px] shrink-0 relative rounded-xl overflow-hidden aspect-video bg-black shadow-sm group-hover:shadow-md transition">
               <img src={ad.videoThumbnail} className="w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" alt="Video thumbnail" />
-              <span className="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-[12px] font-medium px-1.5 py-0.5 rounded backdrop-blur-sm">
-                {ad.duration}
-              </span>
+              <span className="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-[12px] font-medium px-1.5 py-0.5 rounded backdrop-blur-sm">{ad.duration}</span>
             </div>
-            
-            {/* Detalles del Anuncio */}
             <div className="flex flex-col flex-1 py-0.5 justify-start">
               <div className="flex justify-between items-start">
                 <h3 className="text-[18px] text-[#0f0f0f] font-medium leading-[1.3] mb-1.5 line-clamp-2 group-hover:text-[#065fd4] transition-colors pr-4">{ad.title}</h3>
                 <svg className="w-5 h-5 text-[#0f0f0f] opacity-0 group-hover:opacity-100 transition shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"/></svg>
               </div>
-              
               <div className="flex items-center flex-wrap gap-x-2 gap-y-1 mb-2">
                 <span className="bg-[#fcc82d] text-black text-[12px] font-medium px-1.5 py-[1px] rounded-sm tracking-wide">{ad.sponsorLabel || 'Patrocinado'}</span>
                 <span className="text-[#606060] text-[13px] font-medium hover:text-[#0f0f0f]">{ad.channelName}</span>
                 <span className="text-[#606060] text-[13px] hidden sm:inline">•</span>
                 <span className="text-[#606060] text-[13px] hidden sm:inline">{ad.views}</span>
               </div>
-              
               <p className="text-[#606060] text-[13px] leading-relaxed line-clamp-2 mt-1">{ad.description}</p>
-              
               <button className="mt-3 w-fit flex items-center space-x-2 bg-[#065fd4] hover:bg-[#0056b3] text-white text-[13px] font-medium px-4 py-2 rounded-full transition shadow-sm">
                 <span>Más información</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -562,32 +290,24 @@ function GoogleVideoAd({ ad }: AdComponentProps) {
           </div>
         </div>
 
-        {/* Separador inferior simulando continuación de lista */}
         <div className="w-full h-4 bg-gradient-to-b from-[#f9f9f9] to-gray-100 border-t border-gray-200"></div>
       </div>
     </div>
   );
 }
 
-/* 4. Google Display (Banner Horizontal In-Article) */
-function GoogleDisplayAd({ ad }: AdComponentProps) {
+function GoogleDisplayAd({ ad }) {
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Título Descriptivo del Formato */}
       <div className="text-center mb-6 px-4">
         <h3 className="text-xl md:text-2xl font-bold text-white mb-1.5">Banners (Red de Display)</h3>
         <p className="text-[14px] text-zinc-400">Aparece en sitios web, aplicaciones y blogs a la gente que <b>SÍ</b> le interesa</p>
       </div>
 
-      {/* Ventana Simuladora de un Blog / Sitio Web */}
       <div className="w-[650px] max-w-full bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
-        
-        {/* Header del Blog Minimalista */}
         <div className="border-b border-gray-200 px-6 py-3 flex items-center justify-between bg-white z-10">
           <div className="flex items-center space-x-2 cursor-pointer">
-            <div className="w-7 h-7 bg-zinc-800 rounded flex items-center justify-center text-white font-bold text-sm">
-              B
-            </div>
+            <div className="w-7 h-7 bg-zinc-800 rounded flex items-center justify-center text-white font-bold text-sm">B</div>
             <span className="font-bold text-base text-zinc-800 tracking-tight">BlogDiario</span>
           </div>
           <div className="hidden sm:flex space-x-5 text-[13px] font-medium text-gray-500">
@@ -597,41 +317,24 @@ function GoogleDisplayAd({ ad }: AdComponentProps) {
           </div>
         </div>
 
-        {/* Cuerpo del Blog */}
         <div className="flex flex-col p-6 md:p-8 bg-[#fdfdfd] relative">
-          
-          <h1 className="text-2xl font-extrabold text-[#111827] leading-tight mb-4">
-            5 Claves para Ser Más Productivo
-          </h1>
-
-          {/* Párrafo 1 */}
+          <h1 className="text-2xl font-extrabold text-[#111827] leading-tight mb-4">5 Claves para Ser Más Productivo</h1>
           <p className="text-gray-600 text-[15px] leading-[1.7] mb-6">
             En un mundo donde la distracción está a un clic de distancia, mantener el enfoque se ha vuelto uno de los mayores retos profesionales. Organizar tu espacio de trabajo puede incrementar tu eficiencia hasta en un 40%.
           </p>
 
-          {/* ZONA DE ANUNCIO HORIZONTAL (In-Article) */}
           <div className="w-full mb-6">
             <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-1.5 font-medium block">Publicidad</span>
-            
-            <div 
-              className="w-full h-auto sm:h-[120px] flex flex-col sm:flex-row rounded-lg shadow-sm hover:shadow-md overflow-hidden font-sans border border-gray-200 group cursor-pointer transition-all bg-white relative"
-              style={{ backgroundColor: ad.displayBgColor || '#ffffff' }}
-            >
-              {/* Etiqueta Ad */}
+            <div className="w-full h-auto sm:h-[120px] flex flex-col sm:flex-row rounded-lg shadow-sm hover:shadow-md overflow-hidden font-sans border border-gray-200 group cursor-pointer transition-all bg-white relative" style={{ backgroundColor: ad.displayBgColor || '#ffffff' }}>
               <div className="absolute top-1 right-1 bg-white/90 backdrop-blur-sm px-1.5 rounded shadow-sm flex items-center z-20">
                 <span className="text-[9px] text-gray-500 font-semibold uppercase">Ad</span>
               </div>
-              
-              {/* Imagen del Banner */}
               <div className="w-full sm:w-[180px] h-[100px] sm:h-full shrink-0 relative overflow-hidden">
                 <img src={ad.displayImageUrl} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" alt="Banner" />
               </div>
-
-              {/* Contenido del Banner */}
               <div className="flex-1 flex flex-col justify-center px-4 py-3 sm:py-2">
                 <h2 className="text-[16px] font-extrabold text-gray-900 leading-tight mb-1 line-clamp-1">Nueva Colección</h2>
                 <p className="text-[13px] text-gray-700 leading-snug line-clamp-2">{ad.displaySubtext}</p>
-                {/* Logo Marca Opcional */}
                 {ad.pageLogo && (
                   <div className="mt-2 flex items-center space-x-1.5 opacity-80">
                     <img src={ad.pageLogo} className="w-4 h-4 rounded-full object-cover" alt="Logo" />
@@ -639,54 +342,50 @@ function GoogleDisplayAd({ ad }: AdComponentProps) {
                   </div>
                 )}
               </div>
-
-              {/* CTA del Banner */}
               <div className="w-full sm:w-[140px] shrink-0 flex items-center justify-center p-4 sm:pl-0">
-                <button className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-[13px] py-2 px-3 rounded shadow-sm transition-colors">
-                  {ad.ctaText}
-                </button>
+                <button className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-[13px] py-2 px-3 rounded shadow-sm transition-colors">{ad.ctaText}</button>
               </div>
             </div>
           </div>
 
-          {/* Párrafo 2 */}
           <p className="text-gray-600 text-[15px] leading-[1.7] mb-5">
             La clave está en eliminar la fricción para empezar tus tareas. Si dejas todo preparado la noche anterior, la toma de decisiones al despertar será nula y verás resultados inmediatamente.
           </p>
-
-          {/* Líneas simuladas para cierre visual */}
           <div className="w-full h-3 bg-gray-100/80 rounded"></div>
           <div className="w-[85%] h-3 bg-gray-100/80 rounded mt-3"></div>
           <div className="w-[92%] h-3 bg-gray-100/80 rounded mt-3"></div>
-
         </div>
       </div>
     </div>
   );
 }
 
-export default function App() {
-  const [activeAdIndex, setActiveAdIndex] = useState<number>(0);
+export default function GoogleSection() {
+  const [activeAdIndex, setActiveAdIndex] = useState(0);
   const totalAds = ADS_DATABASE.length;
 
   const handleNextAd = () => setActiveAdIndex((prev) => (prev < totalAds - 1 ? prev + 1 : 0));
   const handlePrevAd = () => setActiveAdIndex((prev) => (prev > 0 ? prev - 1 : totalAds - 1));
 
-  // Matemáticas para centrar la tarjeta genérica
   const cardWidth = 550;
-  const cardMargin = 48; // mx-6 = 24px * 2
+  const cardMargin = 48;
   const totalItemWidth = cardWidth + cardMargin;
 
+  const renderAdComponent = (ad) => {
+    switch(ad.type) {
+      case 'shopping': return <GoogleShoppingAd ad={ad} />;
+      case 'video': return <GoogleVideoAd ad={ad} />;
+      case 'display': return <GoogleDisplayAd ad={ad} />;
+      case 'search':
+      default: return <GoogleSearchAd ad={ad} />;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col md:flex-row items-stretch overflow-hidden font-sans selection:bg-blue-600 selection:text-white">
-      
-      {/* COLUMNA IZQUIERDA: Carrusel de Anuncios */}
+    <section id="google-ads" className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col md:flex-row items-stretch overflow-hidden font-sans selection:bg-blue-600 selection:text-white">
       <div className="w-full md:w-2/3 flex flex-col justify-center py-16 relative bg-[#0a0a0a] min-h-[60vh] md:border-r md:border-zinc-800/50">
-        
-        {/* RESPLANDOR (Spotlight detrás de las tarjetas) */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-        {/* Controles del Carrusel */}
         <button onClick={handlePrevAd} className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/50 shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 z-30">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
         </button>
@@ -695,89 +394,46 @@ export default function App() {
           <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
         </button>
 
-        {/* Pista del Carrusel */}
         <div className="relative w-full overflow-hidden flex flex-col justify-center items-center py-12 z-10 min-h-[650px]">
-          <div 
-            className="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] items-center relative" 
-            style={{ 
-              transform: `translateX(calc(50% - ${cardWidth / 2}px - ${activeAdIndex * totalItemWidth}px))`, 
-              width: `${totalAds * totalItemWidth}px` 
-            }}
-          >
+          <div className="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] items-center relative" style={{ transform: `translateX(calc(50% - ${cardWidth / 2}px - ${activeAdIndex * totalItemWidth}px))`, width: `${totalAds * totalItemWidth}px` }}>
             {ADS_DATABASE.map((ad, idx) => {
               const isActive = idx === activeAdIndex;
-              
-              // Render condicional basado en el tipo de anuncio
-              const renderAdComponent = () => {
-                switch(ad.type) {
-                  case 'shopping': return <GoogleShoppingAd ad={ad} />;
-                  case 'video': return <GoogleVideoAd ad={ad} />;
-                  case 'display': return <GoogleDisplayAd ad={ad} />;
-                  case 'search':
-                  default: return <GoogleSearchAd ad={ad} />;
-                }
-              };
-
               return (
-                <div 
-                  key={ad.id} 
-                  className={`mx-6 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isActive ? 'opacity-100 scale-100 z-20 shadow-[0_20px_50px_rgba(37,99,235,0.15)]' : 'opacity-30 scale-[0.85] pointer-events-none blur-[2px]'}`} 
-                  style={{ width: `${cardWidth}px` }}
-                >
-                  {renderAdComponent()}
+                <div key={ad.id} className={`mx-6 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isActive ? 'opacity-100 scale-100 z-20 shadow-[0_20px_50px_rgba(37,99,235,0.15)]' : 'opacity-30 scale-[0.85] pointer-events-none blur-[2px]'}`} style={{ width: `${cardWidth}px` }}>
+                  {renderAdComponent(ad)}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Indicadores */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
           {ADS_DATABASE.map((_, idx) => (
             <button key={idx} onClick={() => setActiveAdIndex(idx)} className={`rounded-full transition-all duration-500 ease-out ${idx === activeAdIndex ? 'w-10 h-2 bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.6)]' : 'w-2 h-2 bg-zinc-700 hover:bg-zinc-600'}`} />
           ))}
         </div>
 
-        {/* Desvanecidos laterales para ocultar exceso */}
         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
       </div>
 
-      {/* COLUMNA DERECHA: Textos Descriptivos */}
       <div className="w-full md:w-1/3 p-8 lg:p-14 flex flex-col justify-center items-center text-center relative bg-[#121212] z-20 min-h-[40vh]">
         <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
-          
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-3 leading-[1.1]" style={{ fontFamily: "'Astonpoliz', sans-serif" }}>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-3 leading-[1.1]" style={{ fontFamily: FONTS.heading }}>
             Publicidad en <br/>
             <span className="text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">Google Ads</span>
           </h1>
-          
           <p className="text-base md:text-lg text-zinc-400 leading-relaxed font-light mb-8 max-w-xs mx-auto">
             Dominamos la red publicitaria más grande del mundo. Aparece en <strong className="text-white font-medium">Búsqueda, Shopping, YouTube, Display</strong> y mil maneras distintas de promocionarte con una sola estrategia.
           </p>
-          
           <span className="text-xs font-bold text-blue-500 tracking-[0.2em] uppercase mb-4 opacity-90">Omnicanalidad Precisa</span>
-          
-          {/* Íconos de Google Stack */}
           <div className="flex flex-wrap items-center justify-center gap-5 text-zinc-500">
-            {/* Google */}
-            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1212.41 1236.32" aria-label="Google">
-              <path d="M1015.9,719.96h-398.11v-205.09h580.57c7.22,13.06,8.98,34.1,10.52,49.8,40.24,408.3-269.78,724.91-682.25,664.16C41.19,1157.32-171.7,565.61,160.84,201.17c229.02-250.99,621.94-270.06,873.11-40.67l-146.19,145.73c-62.8-52.61-143.74-91.07-226.28-98.93C274.66,170.44,52.64,637.06,326.77,909.95c225.13,224.11,612.62,115.2,689.13-189.99Z"/>
-            </svg>
-
-            {/* YouTube (Representativo) */}
-            <svg className="w-6 h-6 hover:text-[#ff0000] transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 24 24" aria-label="youtube">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
-
-            {/* Google Ads */}
-            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1293 1196.13" aria-label="Google Ads">
-              <path d="M649.38,752.65c-6.8-1.47-4.67.89-6.5,3.75-69,107.43-123.35,230.17-193.71,337.57-198.06,243.06-563.3,12.75-414.38-277.16,123.61-240.65,280.77-473.24,408.42-712.7,96.41-138.05,305.18-138.38,404.25-3.5,128.73,240.38,286.54,474.37,410.76,716.2,148.88,289.84-216.27,520.28-414.39,277.17l-194.45-341.33ZM421.67,349.73l-204.35,350.32c106.98-15.92,215.84,47.91,258.37,145.99l112.3-194.1c-47.9-93.43-104.88-181.9-155.12-273.97-4.72-8.64-10.5-18.2-11.2-28.24Z"/>
-            </svg>
+            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1212.41 1236.32" aria-label="Google"><path d="M1015.9,719.96h-398.11v-205.09h580.57c7.22,13.06,8.98,34.1,10.52,49.8,40.24,408.3-269.78,724.91-682.25,664.16C41.19,1157.32-171.7,565.61,160.84,201.17c229.02-250.99,621.94-270.06,873.11-40.67l-146.19,145.73c-62.8-52.61-143.74-91.07-226.28-98.93C274.66,170.44,52.64,637.06,326.77,909.95c225.13,224.11,612.62,115.2,689.13-189.99Z"/></svg>
+            <svg className="w-6 h-6 hover:text-[#ff0000] transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 24 24" aria-label="YouTube"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1293 1196.13" aria-label="Google Ads"><path d="M649.38,752.65c-6.8-1.47-4.67.89-6.5,3.75-69,107.43-123.35,230.17-193.71,337.57-198.06,243.06-563.3,12.75-414.38-277.16,123.61-240.65,280.77-473.24,408.42-712.7,96.41-138.05,305.18-138.38,404.25-3.5,128.73,240.38,286.54,474.37,410.76,716.2,148.88,289.84-216.27,520.28-414.39,277.17l-194.45-341.33ZM421.67,349.73l-204.35,350.32c106.98-15.92,215.84,47.91,258.37,145.99l112.3-194.1c-47.9-93.43-104.88-181.9-155.12-273.97-4.72-8.64-10.5-18.2-11.2-28.24Z"/></svg>
           </div>
         </div>
       </div>
-
-    </div>
+    </section>
   );
 }
