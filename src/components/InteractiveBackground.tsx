@@ -23,6 +23,7 @@ const InteractiveBackground = () => {
 
         mouseRafId = requestAnimationFrame(() => {
           if (orbRef.current) {
+            // Se calcula la posición restando la mitad del ancho del div (125px)
             orbRef.current.style.transform = `translate(${e.clientX - 125}px, ${e.clientY - 125}px)`;
           }
         });
@@ -31,6 +32,7 @@ const InteractiveBackground = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Mover la validación del canvas aquí abajo para proteger los event listeners
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -80,16 +82,6 @@ const InteractiveBackground = () => {
       }
     }
 
-    const init = () => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      particles = Array.from({ length: particleCount }, () => new ParticleImpl(canvas.width, canvas.height));
-      animate();
-    };
-
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -102,7 +94,6 @@ const InteractiveBackground = () => {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
-
           const distSq = dx * dx + dy * dy;
 
           if (distSq < MAX_DIST_SQ) {
@@ -121,6 +112,16 @@ const InteractiveBackground = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
+    const init = () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      particles = Array.from({ length: particleCount }, () => new ParticleImpl(canvas.width, canvas.height));
+      animate();
+    };
+
     window.addEventListener('resize', init);
     init();
 
@@ -136,6 +137,7 @@ const InteractiveBackground = () => {
     <div className="fixed inset-0 -z-10 overflow-hidden bg-black">
       <canvas ref={canvasRef} className="absolute inset-0 opacity-40 pointer-events-none" />
 
+      {/* Blobs de fondo decorativos */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#c5362e]/20 rounded-full blur-[120px] animate-blob pointer-events-none" />
 
       <div
@@ -148,12 +150,12 @@ const InteractiveBackground = () => {
         style={{ animationDelay: '4s' }}
       />
 
+      {/* Orb interactiva del mouse corregida (sin CSS transition) */}
       <div
         ref={orbRef}
         className="absolute top-0 left-0 w-[250px] h-[250px] bg-[#e6af41]/25 rounded-full blur-[80px] pointer-events-none z-0"
         style={{
-          transform: 'translate(-500px, -500px)',
-          transition: 'transform 0.1s cubic-bezier(0.17, 0.67, 0.83, 0.67)'
+          transform: 'translate(-500px, -500px)'
         }}
       />
     </div>
