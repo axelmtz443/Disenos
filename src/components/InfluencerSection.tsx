@@ -6,9 +6,7 @@ export default function InfluencerSection() {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section id="influencer" className="relative min-h-screen py-24 bg-gradient-to-b from-[#0a0a0a] to-[#0f0f12] overflow-hidden">
-      <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full blur-[120px] pointer-events-none opacity-20" style={{ backgroundColor: COLORS.influencer }} />
-      <div className="absolute bottom-1/4 left-1/3 w-[350px] h-[350px] rounded-full blur-[120px] pointer-events-none opacity-15" style={{ backgroundColor: COLORS.influencer }} />
+    <section id="influencer" className="relative min-h-screen py-24 overflow-hidden">
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         <div className="mb-12">
@@ -26,7 +24,7 @@ export default function InfluencerSection() {
         <div className="grid md:grid-cols-3 gap-6">
           {CAMPAIGNS.map((campaign, idx) => (
             <div key={campaign.id} onMouseEnter={() => setHovered(idx)} onMouseLeave={() => setHovered(null)} className="relative group">
-              <div className={`relative bg-zinc-900/80 rounded-2xl border overflow-hidden transition-all duration-500 ${hovered === idx ? 'scale-[1.02]' : ''}`} style={{ borderColor: hovered === idx ? 'rgba(230, 175, 65, 0.5)' : '#27272a', boxShadow: hovered === idx ? '0 20px 40px rgba(230, 175, 65, 0.1)' : 'none' }}>
+              <div className={`relative bg-zinc-900/80 backdrop-blur-sm rounded-2xl border overflow-hidden transition-all duration-500 ${hovered === idx ? 'scale-[1.02]' : ''}`} style={{ borderColor: hovered === idx ? 'rgba(230, 175, 65, 0.5)' : 'rgba(63, 63, 70, 0.5)', boxShadow: hovered === idx ? '0 20px 40px rgba(230, 175, 65, 0.1)' : 'none' }}>
                 <div className="flex items-center gap-3 p-4 border-b border-zinc-800">
                   <div className="relative">
                     <img src={campaign.profilePic} alt={campaign.influencer} className="w-11 h-11 rounded-full object-cover" style={{ border: `2px solid rgba(230, 175, 65, 0.5)` }} />
@@ -72,7 +70,7 @@ export default function InfluencerSection() {
           ))}
         </div>
 
-        <div className="mt-16 p-8 rounded-2xl border" style={{ background: 'linear-gradient(90deg, rgba(230, 175, 65, 0.1), rgba(230, 175, 65, 0.05))', borderColor: 'rgba(230, 175, 65, 0.2)' }}>
+        <div className="mt-16 p-8 rounded-2xl border backdrop-blur-sm" style={{ background: 'linear-gradient(90deg, rgba(230, 175, 65, 0.1), rgba(230, 175, 65, 0.05))', borderColor: 'rgba(230, 175, 65, 0.3)' }}>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #e6af41, #d4a03a)' }}>
               <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.828 1.076 1.828 2.182v9.437a2.25 2.25 0 01-2.182 2.25l-12.593.52c-1.1.045-2.027-.88-1.982-1.98l.52-12.593a2.25 2.25 0 012.25-2.182h9.437c1.106 0 2.041.728 2.182 1.828z"/></svg>

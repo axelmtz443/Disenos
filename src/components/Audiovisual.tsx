@@ -33,9 +33,7 @@ export default function AudiovisualSection() {
   const currentProject: Project = PROJECTS[activeProject];
 
   return (
-    <section id="audiovisual" className="relative min-h-screen py-24 bg-[#0a0a0a] overflow-hidden">
-      <div className="absolute top-1/4 left-1/4 w-100 h-100 rounded-full blur-[120px] pointer-events-none opacity-20" style={{ backgroundColor: COLORS.audiovisual }} />
-      <div className="absolute bottom-1/4 right-1/3 w-75 h-75 rounded-full blur-[120px] pointer-events-none opacity-15" style={{ backgroundColor: COLORS.audiovisual }} />
+    <section id="audiovisual" className="relative min-h-screen py-24 overflow-hidden">
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         <div className="mb-12">
@@ -51,7 +49,7 @@ export default function AudiovisualSection() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          <div className="relative w-full bg-zinc-950 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl flex items-center justify-center max-h-[75vh]">
+          <div className="relative w-full bg-zinc-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-zinc-700/50 shadow-2xl flex items-center justify-center max-h-[75vh]">
             {currentProject.videoUrl ? (
               <video
                 ref={videoRef}
@@ -96,7 +94,7 @@ export default function AudiovisualSection() {
 
           <div className="space-y-4 w-full">
             {PROJECTS.map((project, idx) => (
-              <button key={project.id} onClick={() => setActiveProject(idx)} className={`w-full text-left p-4 rounded-xl border transition-all duration-300 ${activeProject === idx ? 'bg-zinc-900 shadow-lg' : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'}`} style={activeProject === idx ? { borderColor: 'rgba(89, 157, 223, 0.5)', boxShadow: '0 10px 30px rgba(89, 157, 223, 0.1)' } : {}}>
+              <button key={project.id} onClick={() => setActiveProject(idx)} className={`w-full text-left p-4 rounded-xl border transition-all duration-300 ${activeProject === idx ? 'bg-zinc-900/90 backdrop-blur-sm shadow-lg' : 'bg-zinc-900/60 backdrop-blur-sm border-zinc-700/50 hover:border-zinc-600'}`} style={activeProject === idx ? { borderColor: 'rgba(89, 157, 223, 0.5)', boxShadow: '0 10px 30px rgba(89, 157, 223, 0.1)' } : {}}>
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-zinc-950">
                     <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover" />

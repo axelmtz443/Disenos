@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ImageWithFallback, COLORS, FONTS } from '../lib/utils';
+import { ImageWithFallback, FONTS } from '../lib/utils';
 import { ADS_DATABASE, GoogleAd } from '../data/googleData';
 
 interface GoogleSearchAdProps {
@@ -16,18 +16,13 @@ function GoogleSearchAd({ ad }: GoogleSearchAdProps) {
         <p className="text-[14px] text-zinc-400 font-light">Aparece en los primeros resultados de texto en el buscador de Google.</p>
       </div>
 
-      <div className="w-[600px] max-w-full bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
+      <div className="w-[600px] max-w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
         <div className="border-b border-gray-200 bg-white pt-5">
           <div className="flex items-center px-4 md:px-6 mb-4">
             <div className="flex font-sans text-2xl font-medium tracking-tighter mr-5 select-none">
-              <span className="text-[#4285F4]">G</span>
-              <span className="text-[#EA4335]">o</span>
-              <span className="text-[#FBBC04]">o</span>
-              <span className="text-[#4285F4]">g</span>
-              <span className="text-[#34A853]">l</span>
-              <span className="text-[#EA4335]">e</span>
+              <span className="text-[#4285F4]">G</span><span className="text-[#EA4335]">o</span><span className="text-[#FBBC04]">o</span><span className="text-[#4285F4]">g</span><span className="text-[#34A853]">l</span><span className="text-[#EA4335]">e</span>
             </div>
-            <div className="flex-1 flex items-center bg-white border border-gray-200 hover:shadow-md transition-shadow duration-200 rounded-full px-4 py-2 shadow-sm">
+            <div className="flex-1 flex items-center bg-white border border-gray-200 hover:shadow-md transition-shadow rounded-full px-4 py-2 shadow-sm">
               <span className="text-[#202124] text-[15px] flex-1 truncate font-medium">{dummySearchQuery}</span>
               <div className="flex items-center space-x-3 text-gray-500 ml-2 border-l border-gray-200 pl-3">
                 <svg className="w-5 h-5 cursor-pointer" viewBox="0 0 24 24"><path fill="#4285f4" d="m12 15c1.66 0 3-1.31 3-2.97v-7.02c0-1.66-1.34-3.01-3-3.01s-3 1.34-3 3.01v7.02c0 1.66 1.34 2.97 3 2.97z"/><path fill="#34a853" d="m11 18.08h2v3.92h-2z"/><path fill="#fbbc04" d="m7.05 16.87c-1.27-1.33-2.05-2.8-2.05-4.67h2c0 1.45.56 2.42 1.47 3.38v.32l-1.15 1.18z"/><path fill="#ea4335" d="m12 16.93a4.97 5.25 0 0 1 -3.54 -1.55l-1.41 1.49c1.26 1.34 3.02 2.13 4.95 2.13 3.87 0 6.99-2.92 6.99-7h-1.99c0 2.92-2.24 4.93-5 4.93z"/></svg>
@@ -48,10 +43,6 @@ function GoogleSearchAd({ ad }: GoogleSearchAdProps) {
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               <span>Videos</span>
             </div>
-            <div className="flex items-center space-x-1.5 pb-2.5 hover:text-[#1a0dab] cursor-pointer">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/></svg>
-              <span>Noticias</span>
-            </div>
           </div>
         </div>
 
@@ -60,10 +51,6 @@ function GoogleSearchAd({ ad }: GoogleSearchAdProps) {
         </div>
 
         <div className="px-4 md:px-8 pb-8 relative group">
-          <button className="absolute top-0 right-4 md:right-8 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition opacity-0 group-hover:opacity-100">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-          </button>
-
           <div className="flex items-center space-x-3 mb-3">
             <div className="w-7 h-7 rounded-full border border-gray-200 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center">
               <ImageWithFallback src={ad.pageLogo || ''} fallback={`https://ui-avatars.com/api/?name=${encodeURIComponent(ad.pageName || 'A')}&background=f3f4f6&color=000`} alt={ad.pageName || 'Logo'} className="w-full h-full object-cover" />
@@ -74,34 +61,9 @@ function GoogleSearchAd({ ad }: GoogleSearchAdProps) {
             </div>
           </div>
 
-          <div className="text-[14px] font-bold text-[#202124] mb-1.5 flex items-center">Patrocinado</div>
-
+          <div className="text-[14px] font-bold text-[#202124] mb-1.5">Patrocinado</div>
           <h3 className="text-[20px] text-[#1a0dab] font-normal hover:underline cursor-pointer mb-2 leading-snug break-words">{ad.title}</h3>
-          <p className="text-[14px] text-[#4d5156] leading-[1.58] mb-0">{ad.description}</p>
-
-          {ad.whatsappAction && (
-            <div className="mt-4 flex items-center w-full bg-white border border-gray-300 rounded-full px-5 py-3 hover:bg-gray-50 transition cursor-pointer group">
-              <svg viewBox="0 0 24 24" className="w-10 h-10 shrink-0 mr-4">
-                <path fill="#25D366" d="M12.012 2.002c-5.51 0-9.99 4.48-9.99 9.99 0 1.763.458 3.483 1.332 5.006L2.013 22l5.12-1.341a9.957 9.957 0 004.879 1.343c5.51 0 9.99-4.48 9.99-9.99a9.986 9.986 0 00-10-9.99z"/>
-                <path fill="#FFFFFF" d="M16.21 14.28c-.22.61-1.28 1.13-1.78 1.18-.48.05-.98.07-3.12-.76-2.73-1.06-4.47-3.85-4.61-4.04-.13-.19-1.11-1.48-1.11-2.82 0-1.34.7-2 1-2.29.23-.23.61-.35.97-.35.12 0 .23 0 .33.01.29.01.44.02.63.48.24.58.82 2 .9 2.15.08.15.13.33.03.53-.1.2-.21.33-.37.52-.16.19-.34.42-.48.56-.16.16-.33.34-.14.67.19.32.85 1.41 1.83 2.28 1.26 1.13 2.32 1.48 2.65 1.65.3.15.48.13.66-.08.19-.23.82-.95 1.04-1.28.22-.33.44-.28.74-.17.3.11 1.91.9 2.24 1.07.33.16.55.24.63.38.08.14.08.82-.14 1.43z"/>
-              </svg>
-              <div className="flex flex-col text-left">
-                <span className="text-[#1a0dab] font-medium text-[16px] group-hover:underline leading-tight">{ad.whatsappAction.title}</span>
-                <span className="text-[#70757a] text-[13px] mt-0.5">{ad.whatsappAction.subtitle}</span>
-              </div>
-            </div>
-          )}
-
-          {ad.stackedSitelinks && (
-            <div className="mt-4 border-t border-gray-200 flex flex-col">
-              {ad.stackedSitelinks.map((link, i) => (
-                <div key={i} className="flex items-center justify-between py-3 border-b border-gray-200 hover:bg-gray-50 transition px-1 cursor-pointer group">
-                  <span className="text-[16px] text-[#1a0dab] group-hover:underline">{link}</span>
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7"/></svg>
-                </div>
-              ))}
-            </div>
-          )}
+          <p className="text-[14px] text-[#4d5156] leading-[1.58]">{ad.description}</p>
 
           {ad.tags && (
             <div className="flex flex-nowrap overflow-hidden gap-2 mt-4 -mx-1 px-1">
@@ -135,87 +97,42 @@ function GoogleShoppingAd({ ad }: GoogleSearchAdProps) {
     <div className="flex flex-col items-center w-full">
       <div className="text-center mb-6 px-4">
         <h3 className="text-xl md:text-2xl font-bold text-white mb-1.5">Google Shopping</h3>
-        <p className="text-[14px] text-zinc-400 font-light">Muestra productos directos con imagen y precio en la cima de los resultados de búsqueda.</p>
+        <p className="text-[14px] text-zinc-400 font-light">Muestra productos directos con imagen y precio en los resultados de búsqueda.</p>
       </div>
 
-      <div className="w-[600px] max-w-full bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
+      <div className="w-[600px] max-w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
         <div className="border-b border-gray-200 bg-white pt-5">
           <div className="flex items-center px-4 md:px-6 mb-4">
             <div className="flex font-sans text-2xl font-medium tracking-tighter mr-5 select-none">
-              <span className="text-[#4285F4]">G</span>
-              <span className="text-[#EA4335]">o</span>
-              <span className="text-[#FBBC04]">o</span>
-              <span className="text-[#4285F4]">g</span>
-              <span className="text-[#34A853]">l</span>
-              <span className="text-[#EA4335]">e</span>
+              <span className="text-[#4285F4]">G</span><span className="text-[#EA4335]">o</span><span className="text-[#FBBC04]">o</span><span className="text-[#4285F4]">g</span><span className="text-[#34A853]">l</span><span className="text-[#EA4335]">e</span>
             </div>
-            <div className="flex-1 flex items-center bg-white border border-gray-200 hover:shadow-md transition-shadow duration-200 rounded-full px-4 py-2 shadow-sm">
+            <div className="flex-1 flex items-center bg-white border border-gray-200 hover:shadow-md transition-shadow rounded-full px-4 py-2 shadow-sm">
               <span className="text-[#202124] text-[15px] flex-1 truncate font-medium">{dummySearchQuery}</span>
-              <div className="flex items-center space-x-3 text-gray-500 ml-2 border-l border-gray-200 pl-3">
-                <svg className="w-5 h-5 cursor-pointer" viewBox="0 0 24 24"><path fill="#4285f4" d="m12 15c1.66 0 3-1.31 3-2.97v-7.02c0-1.66-1.34-3.01-3-3.01s-3 1.34-3 3.01v7.02c0 1.66 1.34 2.97 3 2.97z"/><path fill="#34a853" d="m11 18.08h2v3.92h-2z"/><path fill="#fbbc04" d="m7.05 16.87c-1.27-1.33-2.05-2.8-2.05-4.67h2c0 1.45.56 2.42 1.47 3.38v.32l-1.15 1.18z"/><path fill="#ea4335" d="m12 16.93a4.97 5.25 0 0 1 -3.54 -1.55l-1.41 1.49c1.26 1.34 3.02 2.13 4.95 2.13 3.87 0 6.99-2.92 6.99-7h-1.99c0 2.92-2.24 4.93-5 4.93z"/></svg>
-                <svg className="w-5 h-5 text-[#4285F4] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-              </div>
             </div>
           </div>
-          <div className="flex items-center px-4 md:px-6 space-x-6 text-[13px] text-[#5f6368] overflow-x-auto hide-scrollbar">
-            <div className="flex items-center space-x-1.5 pb-2.5 border-b-2 border-[#1a73e8] text-[#1a73e8] font-medium cursor-pointer">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-              <span>Todo</span>
-            </div>
-            <div className="flex items-center space-x-1.5 pb-2.5 hover:text-[#1a0dab] cursor-pointer">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.55 13c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2h7.45zM6.16 6h12.15l-2.76 5h-7.02L6.16 6zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-              <span>Shopping</span>
-            </div>
-            <div className="flex items-center space-x-1.5 pb-2.5 hover:text-[#1a0dab] cursor-pointer">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-              <span>Imágenes</span>
-            </div>
-            <div className="flex items-center space-x-1.5 pb-2.5 hover:text-[#1a0dab] cursor-pointer">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <span>Videos</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="px-4 md:px-8 pt-3 pb-2 text-[13px] text-[#70757a]">
-          Cerca de 1,120,000 resultados (0.42 segundos)
         </div>
 
         <div className="px-4 md:px-8 pb-8 relative group">
           <div className="flex items-center mb-3">
             <span className="text-[13px] font-bold text-[#202124]">Patrocinado</span>
-            <div className="ml-1.5 cursor-pointer text-gray-500 hover:text-gray-700">
-              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            </div>
           </div>
 
           <div className="relative flex items-center w-full">
             <div className="flex space-x-3 overflow-x-auto w-full hide-scrollbar pb-3 pt-1 px-1 -mx-1">
               {ad.products?.map((p, i) => (
                 <div key={i} className="w-[145px] shrink-0 flex flex-col border border-gray-200 hover:border-gray-300 hover:shadow-md rounded-xl overflow-hidden transition-all cursor-pointer group bg-white">
-                  <div className="w-full aspect-square bg-white flex items-center justify-center p-3 relative">
+                  <div className="w-full aspect-square bg-white flex items-center justify-center p-3">
                     <img src={p.image} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition-transform duration-300" alt={p.title} />
                   </div>
                   <div className="p-3 flex flex-col items-start text-left flex-1 border-t border-gray-100">
                     <span className="text-[13px] text-[#1a0dab] font-medium leading-[1.3] line-clamp-2 group-hover:underline h-[34px]">{p.title}</span>
-                    <span className="text-[16px] font-bold text-[#202124] mt-2 tracking-tight">{p.price}</span>
+                    <span className="text-[16px] font-bold text-[#202124] mt-2">{p.price}</span>
                     <span className="text-[12px] text-[#4d5156] mt-1 truncate w-full">{p.store}</span>
-                    <div className="flex items-center space-x-1 mt-1.5 h-4">
-                      {p.rating && (
-                        <div className="flex items-center text-[#fbbc04]">
-                          <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                          <span className="text-[11px] text-[#70757a] ml-1 font-medium">({p.reviews})</span>
-                        </div>
-                      )}
-                    </div>
                     {p.promo && <span className="text-[11px] font-medium text-[#137333] mt-2 bg-[#e6f4ea] px-1.5 py-0.5 rounded-sm">{p.promo}</span>}
                   </div>
                 </div>
               ))}
             </div>
-            <button className="absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 bg-white border border-gray-200 rounded-full shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-lg transition z-10 translate-x-3">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
-            </button>
           </div>
         </div>
 
@@ -226,8 +143,6 @@ function GoogleShoppingAd({ ad }: GoogleSearchAdProps) {
 }
 
 function GoogleVideoAd({ ad }: GoogleSearchAdProps) {
-  const dummySearchQuery = "Mejorar mis ventas";
-
   return (
     <div className="flex flex-col items-center w-full">
       <div className="text-center mb-6 px-4">
@@ -235,57 +150,38 @@ function GoogleVideoAd({ ad }: GoogleSearchAdProps) {
         <p className="text-[14px] text-zinc-400 font-light">Aparece primero en los resultados y recomendaciones de YouTube.</p>
       </div>
 
-      <div className="w-[600px] max-w-full bg-[#f9f9f9] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
-        <div className="flex items-center justify-between px-4 py-2 bg-white">
+      <div className="w-[600px] max-w-full bg-[#0f0f0f]/95 backdrop-blur-sm rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-zinc-700/50 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
+        <div className="flex items-center justify-between px-4 py-2 bg-[#0f0f0f]">
           <div className="flex items-center space-x-4">
-            <svg className="w-5 h-5 text-[#0f0f0f] cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M21 6H3V5h18v1zm0 5H3v1h18v-1zm0 6H3v1h18v-1z"/></svg>
-            <div className="flex items-center tracking-tighter text-[18px] font-bold text-[#0f0f0f] cursor-pointer">
+            <div className="flex items-center tracking-tighter text-[18px] font-bold text-white cursor-pointer">
               <svg className="w-7 h-7 text-[#FF0000] mr-1" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M21.582 6.186a2.594 2.594 0 0 0-1.824-1.838C18.147 3.911 12 3.911 12 3.911s-6.147 0-7.758.437A2.594 2.594 0 0 0 2.418 6.186C2 7.82 2 12 2 12s0 4.18.418 5.814a2.594 2.594 0 0 0 1.824 1.838c1.611.437 7.758.437 7.758.437s6.147 0 7.758-.437a2.594 2.594 0 0 0 1.824-1.838c.418-1.634.418-5.814.418-5.814s0-4.18-.418-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
               YouTube
             </div>
           </div>
-          <div className="hidden sm:flex items-center flex-1 max-w-[300px] mx-4">
-            <div className="flex w-full border border-[#cccccc] rounded-l-full overflow-hidden bg-white px-3 py-1.5 shadow-inner">
-              <span className="text-[#0f0f0f] text-[15px] flex-1 truncate font-normal outline-none">{dummySearchQuery}</span>
-            </div>
-            <button className="bg-[#f8f8f8] border border-l-0 border-[#cccccc] rounded-r-full px-4 py-1.5 hover:bg-[#f0f0f0] transition">
-              <svg className="w-5 h-5 text-[#0f0f0f]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.87 20.17l-5.59-5.59C16.35 13.35 17 11.75 17 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.75 0 3.35-.65 4.58-1.71l5.59 5.59.7-.7zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
-            </button>
-          </div>
-          <div className="flex items-center space-x-3 text-[#0f0f0f]">
-            <svg className="w-5 h-5 cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2zm3-7H3v12h14v-6.39l4 1.83V8.56l-4 1.83V6m1-1v3.83L22 7v8l-4-1.83V19H2V5h16z"/></svg>
-            <svg className="w-5 h-5 cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-1.42 1.49-2.5 2.99-1.76.65.32 1.01 1.03 1.01 1.76v.39c2.44.75 4 3.06 4 5.98v5.15l2 1.87zM12 5.5c-2.4 0-4.44 1.55-4.9 3.86L7.02 9.57l-.35-.61c.65-2.91 3.24-4.96 6.33-4.96v1.5z"/></svg>
-            <div className="w-7 h-7 rounded-full bg-[#3EA6FF] flex items-center justify-center text-white text-xs font-medium cursor-pointer">U</div>
-          </div>
+          <div className="w-7 h-7 rounded-full bg-[#3EA6FF] flex items-center justify-center text-white text-xs font-medium cursor-pointer">U</div>
         </div>
 
-        <div className="flex space-x-3 px-4 py-3 bg-white border-b border-gray-200 overflow-x-hidden border-t">
-          <span className="bg-[#0f0f0f] text-white px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer transition">Todo</span>
-          <span className="bg-[#f2f2f2] hover:bg-[#e5e5e5] text-[#0f0f0f] px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer transition">{dummySearchQuery}</span>
-          <span className="bg-[#f2f2f2] hover:bg-[#e5e5e5] text-[#0f0f0f] px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer transition whitespace-nowrap">Vistos recientemente</span>
-          <span className="bg-[#f2f2f2] hover:bg-[#e5e5e5] text-[#0f0f0f] px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer transition">Novedades</span>
+        <div className="flex space-x-3 px-4 py-3 bg-[#0f0f0f]/80 border-t border-zinc-800">
+          <span className="bg-white text-black px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer">Todo</span>
+          <span className="bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1 rounded-lg text-[13px] font-medium cursor-pointer">Videos</span>
         </div>
 
-        <div className="px-4 md:px-6 py-5 relative bg-[#f9f9f9]">
+        <div className="px-4 md:px-6 py-5 relative bg-[#0f0f0f]/50">
           <div className="w-full flex flex-col md:flex-row gap-4 text-left cursor-pointer group">
             <div className="w-full md:w-[260px] shrink-0 relative rounded-xl overflow-hidden aspect-video bg-black shadow-sm group-hover:shadow-md transition">
               <img src={ad.videoThumbnail} className="w-full h-full object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" alt="Video thumbnail" />
               <span className="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-[12px] font-medium px-1.5 py-0.5 rounded backdrop-blur-sm">{ad.duration}</span>
             </div>
             <div className="flex flex-col flex-1 py-0.5 justify-start">
-              <div className="flex justify-between items-start">
-                <h3 className="text-[18px] text-[#0f0f0f] font-medium leading-[1.3] mb-1.5 line-clamp-2 group-hover:text-[#065fd4] transition-colors pr-4">{ad.title}</h3>
-                <svg className="w-5 h-5 text-[#0f0f0f] opacity-0 group-hover:opacity-100 transition shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM10.5 12c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5zm0-6c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5-1.5.67-1.5 1.5z"/></svg>
-              </div>
+              <h3 className="text-[18px] text-white font-medium leading-[1.3] mb-1.5 line-clamp-2 group-hover:text-[#3EA6FF] transition-colors pr-4">{ad.title}</h3>
               <div className="flex items-center flex-wrap gap-x-2 gap-y-1 mb-2">
                 <span className="bg-[#fcc82d] text-black text-[12px] font-medium px-1.5 py-[1px] rounded-sm tracking-wide">{ad.sponsorLabel || 'Patrocinado'}</span>
-                <span className="text-[#606060] text-[13px] font-medium hover:text-[#0f0f0f]">{ad.channelName}</span>
-                <span className="text-[#606060] text-[13px] hidden sm:inline">•</span>
-                <span className="text-[#606060] text-[13px] hidden sm:inline">{ad.views}</span>
+                <span className="text-zinc-400 text-[13px] font-medium">{ad.channelName}</span>
+                <span className="text-zinc-500 text-[13px]">{ad.views}</span>
               </div>
-              <p className="text-[#606060] text-[13px] leading-relaxed line-clamp-2 mt-1">{ad.description}</p>
+              <p className="text-zinc-400 text-[13px] leading-relaxed line-clamp-2 mt-1">{ad.description}</p>
               <button className="mt-3 w-fit flex items-center space-x-2 bg-[#065fd4] hover:bg-[#0056b3] text-white text-[13px] font-medium px-4 py-2 rounded-full transition shadow-sm">
                 <span>Más información</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -293,8 +189,6 @@ function GoogleVideoAd({ ad }: GoogleSearchAdProps) {
             </div>
           </div>
         </div>
-
-        <div className="w-full h-4 bg-gradient-to-b from-[#f9f9f9] to-gray-100 border-t border-gray-200"></div>
       </div>
     </div>
   );
@@ -305,10 +199,10 @@ function GoogleDisplayAd({ ad }: GoogleSearchAdProps) {
     <div className="flex flex-col items-center w-full">
       <div className="text-center mb-6 px-4">
         <h3 className="text-xl md:text-2xl font-bold text-white mb-1.5">Banners (Red de Display)</h3>
-        <p className="text-[14px] text-zinc-400">Aparece en sitios web, aplicaciones y blogs a la gente que <b>SÍ</b> le interesa</p>
+        <p className="text-[14px] text-zinc-400">Aparece en sitios web y apps a la gente que le interesa</p>
       </div>
 
-      <div className="w-[650px] max-w-full bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
+      <div className="w-[650px] max-w-full bg-white/95 backdrop-blur-sm rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] border border-gray-200 overflow-hidden text-left shrink-0 font-sans relative flex flex-col">
         <div className="border-b border-gray-200 px-6 py-3 flex items-center justify-between bg-white z-10">
           <div className="flex items-center space-x-2 cursor-pointer">
             <div className="w-7 h-7 bg-zinc-800 rounded flex items-center justify-center text-white font-bold text-sm">B</div>
@@ -317,19 +211,16 @@ function GoogleDisplayAd({ ad }: GoogleSearchAdProps) {
           <div className="hidden sm:flex space-x-5 text-[13px] font-medium text-gray-500">
             <span className="hover:text-black cursor-pointer text-blue-600 transition-colors">Actualidad</span>
             <span className="hover:text-black cursor-pointer transition-colors">Tecnología</span>
-            <span className="hover:text-black cursor-pointer transition-colors">Estilo de Vida</span>
           </div>
         </div>
 
-        <div className="flex flex-col p-6 md:p-8 bg-[#fdfdfd] relative">
+        <div className="flex flex-col p-6 md:p-8 bg-[#fdfdfd]/95 relative">
           <h1 className="text-2xl font-extrabold text-[#111827] leading-tight mb-4">5 Claves para Ser Más Productivo</h1>
-          <p className="text-gray-600 text-[15px] leading-[1.7] mb-6">
-            En un mundo donde la distracción está a un clic de distancia, mantener el enfoque se ha vuelto uno de los mayores retos profesionales. Organizar tu espacio de trabajo puede incrementar tu eficiencia hasta en un 40%.
-          </p>
+          <p className="text-gray-600 text-[15px] leading-[1.7] mb-6">En un mundo donde la distracción está a un clic de distancia, mantener el enfoque se ha vuelto uno de los mayores retos profesionales.</p>
 
           <div className="w-full mb-6">
             <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-1.5 font-medium block">Publicidad</span>
-            <div className="w-full h-auto sm:h-[120px] flex flex-col sm:flex-row rounded-lg shadow-sm hover:shadow-md overflow-hidden font-sans border border-gray-200 group cursor-pointer transition-all bg-white relative" style={{ backgroundColor: ad.displayBgColor || '#ffffff' }}>
+            <div className="w-full h-auto sm:h-[120px] flex flex-col sm:flex-row rounded-lg shadow-sm hover:shadow-md overflow-hidden font-sans border border-gray-200 group cursor-pointer transition-all bg-white relative">
               <div className="absolute top-1 right-1 bg-white/90 backdrop-blur-sm px-1.5 rounded shadow-sm flex items-center z-20">
                 <span className="text-[9px] text-gray-500 font-semibold uppercase">Ad</span>
               </div>
@@ -337,14 +228,8 @@ function GoogleDisplayAd({ ad }: GoogleSearchAdProps) {
                 <img src={ad.displayImageUrl} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" alt="Banner" />
               </div>
               <div className="flex-1 flex flex-col justify-center px-4 py-3 sm:py-2">
-                <h2 className="text-[16px] font-extrabold text-gray-900 leading-tight mb-1 line-clamp-1">Nueva Colección</h2>
-                <p className="text-[13px] text-gray-700 leading-snug line-clamp-2">{ad.displaySubtext}</p>
-                {ad.pageLogo && (
-                  <div className="mt-2 flex items-center space-x-1.5 opacity-80">
-                    <img src={ad.pageLogo} className="w-4 h-4 rounded-full object-cover" alt="Logo" />
-                    <span className="text-[10px] text-gray-500 font-medium">Patrocinado</span>
-                  </div>
-                )}
+                <h2 className="text-[16px] font-extrabold text-gray-900 leading-tight mb-1">Nueva Colección</h2>
+                <p className="text-[13px] text-gray-700">{ad.displaySubtext}</p>
               </div>
               <div className="w-full sm:w-[140px] shrink-0 flex items-center justify-center p-4 sm:pl-0">
                 <button className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-[13px] py-2 px-3 rounded shadow-sm transition-colors">{ad.ctaText}</button>
@@ -352,9 +237,6 @@ function GoogleDisplayAd({ ad }: GoogleSearchAdProps) {
             </div>
           </div>
 
-          <p className="text-gray-600 text-[15px] leading-[1.7] mb-5">
-            La clave está en eliminar la fricción para empezar tus tareas. Si dejas todo preparado la noche anterior, la toma de decisiones al despertar será nula y verás resultados inmediatamente.
-          </p>
           <div className="w-full h-3 bg-gray-100/80 rounded"></div>
           <div className="w-[85%] h-3 bg-gray-100/80 rounded mt-3"></div>
           <div className="w-[92%] h-3 bg-gray-100/80 rounded mt-3"></div>
@@ -369,13 +251,12 @@ function renderAdComponent(ad: GoogleAd) {
     case 'shopping': return <GoogleShoppingAd ad={ad} />;
     case 'video': return <GoogleVideoAd ad={ad} />;
     case 'display': return <GoogleDisplayAd ad={ad} />;
-    case 'search':
     default: return <GoogleSearchAd ad={ad} />;
   }
 }
 
 export default function GoogleSection() {
-  const [activeAdIndex, setActiveAdIndex] = useState<number>(0);
+  const [activeAdIndex, setActiveAdIndex] = useState(0);
   const totalAds = ADS_DATABASE.length;
 
   const handleNextAd = () => setActiveAdIndex((prev) => (prev < totalAds - 1 ? prev + 1 : 0));
@@ -386,15 +267,13 @@ export default function GoogleSection() {
   const totalItemWidth = cardWidth + cardMargin;
 
   return (
-    <section id="google-ads" className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col md:flex-row items-stretch overflow-hidden font-sans selection:bg-blue-600 selection:text-white">
-      <div className="w-full md:w-2/3 flex flex-col justify-center py-16 relative bg-[#0a0a0a] min-h-[60vh] md:border-r md:border-zinc-800/50">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
-
-        <button onClick={handlePrevAd} className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/50 shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 z-30">
+    <section id="google-ads" className="min-h-screen flex flex-col md:flex-row items-stretch overflow-hidden">
+      <div className="w-full md:w-2/3 flex flex-col justify-center py-16 relative min-h-[60vh] md:min-h-screen">
+        <button onClick={handlePrevAd} className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-zinc-900/80 backdrop-blur-md hover:bg-zinc-800 border border-zinc-700 shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 z-30">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
         </button>
 
-        <button onClick={handleNextAd} className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/50 shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 z-30">
+        <button onClick={handleNextAd} className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-zinc-900/80 backdrop-blur-md hover:bg-zinc-800 border border-zinc-700 shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-105 active:scale-95 z-30">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
         </button>
 
@@ -403,7 +282,7 @@ export default function GoogleSection() {
             {ADS_DATABASE.map((ad, idx) => {
               const isActive = idx === activeAdIndex;
               return (
-                <div key={ad.id} className={`mx-6 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isActive ? 'opacity-100 scale-100 z-20 shadow-[0_20px_50px_rgba(37,99,235,0.15)]' : 'opacity-30 scale-[0.85] pointer-events-none blur-[2px]'}`} style={{ width: `${cardWidth}px` }}>
+                <div key={ad.id} className={`mx-6 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isActive ? 'opacity-100 scale-100 z-20' : 'opacity-30 scale-[0.85] pointer-events-none blur-[2px]'}`} style={{ width: `${cardWidth}px` }}>
                   {renderAdComponent(ad)}
                 </div>
               );
@@ -413,28 +292,25 @@ export default function GoogleSection() {
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
           {ADS_DATABASE.map((_, idx) => (
-            <button key={idx} onClick={() => setActiveAdIndex(idx)} className={`rounded-full transition-all duration-500 ease-out ${idx === activeAdIndex ? 'w-10 h-2 bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.6)]' : 'w-2 h-2 bg-zinc-700 hover:bg-zinc-600'}`} />
+            <button key={idx} onClick={() => setActiveAdIndex(idx)} className={`rounded-full transition-all duration-500 ease-out ${idx === activeAdIndex ? 'w-10 h-2 bg-[#1a73e8] shadow-[0_0_15px_rgba(26,115,232,0.6)]' : 'w-2 h-2 bg-zinc-600 hover:bg-zinc-400'}`} />
           ))}
         </div>
-
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-20 pointer-events-none" />
       </div>
 
-      <div className="w-full md:w-1/3 p-8 lg:p-14 flex flex-col justify-center items-center text-center relative bg-[#121212] z-20 min-h-[40vh]">
-        <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
+      <div className="w-full md:w-1/3 p-8 lg:p-14 flex flex-col justify-center items-center text-center min-h-[40vh] md:min-h-screen">
+        <div className="w-full max-w-sm flex flex-col items-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-3 leading-[1.1]" style={{ fontFamily: FONTS.heading }}>
             Publicidad en <br/>
-            <span className="text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">Google Ads</span>
+            <span className="text-[#1a73e8]">Google Ads</span>
           </h1>
           <p className="text-base md:text-lg text-zinc-400 leading-relaxed font-light mb-8 max-w-xs mx-auto">
-            Dominamos la red publicitaria más grande del mundo. Aparece en <strong className="text-white font-medium">Búsqueda, Shopping, YouTube, Display</strong> y mil maneras distintas de promocionarte con una sola estrategia.
+            Dominamos la red publicitaria más grande del mundo. <strong className="text-white font-medium">Búsqueda, Shopping, YouTube, Display</strong> y más en una sola estrategia.
           </p>
-          <span className="text-xs font-bold text-blue-500 tracking-[0.2em] uppercase mb-4 opacity-90">Omnicanalidad Precisa</span>
+          <span className="text-xs font-bold text-[#1a73e8] tracking-[0.2em] uppercase mb-4">Omnicanalidad Precisa</span>
           <div className="flex flex-wrap items-center justify-center gap-5 text-zinc-500">
-            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1212.41 1236.32" aria-label="Google"><path d="M1015.9,719.96h-398.11v-205.09h580.57c7.22,13.06,8.98,34.1,10.52,49.8,40.24,408.3-269.78,724.91-682.25,664.16C41.19,1157.32-171.7,565.61,160.84,201.17c229.02-250.99,621.94-270.06,873.11-40.67l-146.19,145.73c-62.8-52.61-143.74-91.07-226.28-98.93C274.66,170.44,52.64,637.06,326.77,909.95c225.13,224.11,612.62,115.2,689.13-189.99Z"/></svg>
-            <svg className="w-6 h-6 hover:text-[#ff0000] transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 24 24" aria-label="YouTube"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1293 1196.13" aria-label="Google Ads"><path d="M649.38,752.65c-6.8-1.47-4.67.89-6.5,3.75-69,107.43-123.35,230.17-193.71,337.57-198.06,243.06-563.3,12.75-414.38-277.16,123.61-240.65,280.77-473.24,408.42-712.7,96.41-138.05,305.18-138.38,404.25-3.5,128.73,240.38,286.54,474.37,410.76,716.2,148.88,289.84-216.27,520.28-414.39,277.17l-194.45-341.33ZM421.67,349.73l-204.35,350.32c106.98-15.92,215.84,47.91,258.37,145.99l112.3-194.1c-47.9-93.43-104.88-181.9-155.12-273.97-4.72-8.64-10.5-18.2-11.2-28.24Z"/></svg>
+            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1212.41 1236.32"><path d="M1015.9,719.96h-398.11v-205.09h580.57c7.22,13.06,8.98,34.1,10.52,49.8,40.24,408.3-269.78,724.91-682.25,664.16C41.19,1157.32-171.7,565.61,160.84,201.17c229.02-250.99,621.94-270.06,873.11-40.67l-146.19,145.73c-62.8-52.61-143.74-91.07-226.28-98.93C274.66,170.44,52.64,637.06,326.77,909.95c225.13,224.11,612.62,115.2,689.13-189.99Z"/></svg>
+            <svg className="w-6 h-6 hover:text-[#ff0000] transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1293 1196.13"><path d="M649.38,752.65c-6.8-1.47-4.67.89-6.5,3.75-69,107.43-123.35,230.17-193.71,337.57-198.06,243.06-563.3,12.75-414.38-277.16,123.61-240.65,280.77-473.24,408.42-712.7,96.41-138.05,305.18-138.38,404.25-3.5,128.73,240.38,286.54,474.37,410.76,716.2,148.88,289.84-216.27,520.28-414.39,277.17l-194.45-341.33ZM421.67,349.73l-204.35,350.32c106.98-15.92,215.84,47.91,258.37,145.99l112.3-194.1c-47.9-93.43-104.88-181.9-155.12-273.97-4.72-8.64-10.5-18.2-11.2-28.24Z"/></svg>
           </div>
         </div>
       </div>
