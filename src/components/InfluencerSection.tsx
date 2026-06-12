@@ -3,7 +3,7 @@ import { COLORS, FONTS } from '../lib/utils';
 import { CAMPAIGNS } from '../data/influencerData';
 
 export default function InfluencerSection() {
-  const [hovered, setHovered] = useState(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <section id="influencer" className="relative min-h-screen py-24 bg-gradient-to-b from-[#0a0a0a] to-[#0f0f12] overflow-hidden">

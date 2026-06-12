@@ -1,4 +1,29 @@
-export const ADS_DATABASE = [
+export interface CarouselCard {
+  image: string;
+  fallbackImage: string;
+  domain: string;
+  title: string;
+  ctaText: string;
+}
+
+export interface MetaAd {
+  id: string;
+  pageName: string;
+  pageLogo: string;
+  mainText: string;
+  type: 'single-video' | 'carousel' | 'single-image';
+  videoUrl?: string;
+  videoPoster?: string;
+  imageUrl?: string;
+  imageFallback?: string;
+  ctaDomain: string;
+  ctaTitle: string;
+  ctaDesc: string;
+  ctaBtnText: string;
+  carouselCards?: CarouselCard[];
+}
+
+export const ADS_DATABASE: MetaAd[] = [
   {
     id: "mercedes-benz",
     pageName: "Mercedes-Benz Eurostern",
@@ -46,13 +71,17 @@ export const ADS_DATABASE = [
         title: "Expertas en colorimetría",
         ctaText: "Enviar mensaje"
       }
-    ]
+    ],
+    ctaDomain: "",
+    ctaTitle: "",
+    ctaDesc: "",
+    ctaBtnText: ""
   },
   {
     id: "ortopedia-justo-sierra",
     pageName: "Ortopedia Justo Sierra",
     pageLogo: "https://scontent.fgdl1-4.fna.fbcdn.net/v/t39.35426-6/697045892_2598343853960156_4298980226771185265_n.jpg?stp=dst-jpg_s60x60_tt6&_nc_cat=110&ccb=1-7&_nc_sid=c53f8f&_nc_ohc=---mYyBTn8UQ7kNvwGm8B-G&_nc_oc=Ado_TJgWkhxcURnNxeT1Z3LH8r5_K7NYiEpOKY09s5FCqcE6P0ry9gdydYkPfqNaq-I&_nc_zt=14&_nc_ht=scontent.fgdl1-4.fna&_nc_gid=XveLqqErr2-kkRd1PJt20A&_nc_ss=7b2a8&oh=00_Af-OZ0SfgSsNMKRVxepgS1Z4i28sgDIlWpHSdrSkbZMFLg&oe=6A27AFEC",
-    mainText: `Si tienes un problem grave en la rodilla, no necesitas a un médico que hoy opere una mano y mañana un pie; necesitas a alguien que dedique el 100% de su vida a reconstruir rodillas.\n\nEsa es la diferencia de nuestro grupo médico en Guadalajara. Somos un equipo de 5 traumatólogos con subespecialidades específicas. Nuestro modelo es simple pero poderoso: el experto en columna de la columna, el de hombro ve el hombro.\n\nEntrar a un quirófano es un paso importante. Antes de tomar cualquier decisión, permite que el experto exacto revise tu caso.\n✅ Diagnósticos respaldados por certificaciones internacionales. \n✅ Un equipo completo analizando los casos más complejos.`,
+    mainText: "Si tienes un problem grave en la rodilla, no necesitas a un médico que hoy opere una mano y mañana un pie; necesitas a alguien que dedique el 100% de su vida a reconstruir rodillas.\n\nEsa es la diferencia de nuestro grupo médico en Guadalajara. Somos un equipo de 5 traumatólogos con subespecialidades específicas. Nuestro modelo es simple pero poderoso: el experto en columna de la columna, el de hombro ve el hombro.\n\nEntrar a un quirófano es un paso importante. Antes de tomar cualquier decisión, permite que el experto exacto revise tu caso.\n✅ Diagnósticos respaldados por certificaciones internacionales. \n✅ Un equipo completo analizando los casos más complejos.",
     type: "single-video",
     videoUrl: "https://grupoweprom.com/mktgdigital/Justo Sierra.mp4",
     ctaDomain: "ORTOPEDIAJUSTOSIERRA.MX",

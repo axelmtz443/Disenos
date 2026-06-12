@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ImageWithFallback, ExpandableText, SocialActions, COLORS, FONTS } from '../lib/utils';
-import { ADS_DATABASE } from '../data/metaData';
+import { ADS_DATABASE, MetaAd } from '../data/metaData';
 
-function AdHeader({ ad }) {
+interface AdHeaderProps {
+  ad: MetaAd;
+}
+
+interface AdFooterProps {
+  ad: MetaAd;
+  isWhatsApp: boolean;
+}
+
+function AdHeader({ ad }: AdHeaderProps) {
   return (
     <div className="p-4 flex justify-between items-start">
       <div className="flex items-center space-x-3 min-w-0">
@@ -41,7 +50,7 @@ function AdHeader({ ad }) {
   );
 }
 
-function AdFooter({ ad, isWhatsApp }) {
+function AdFooter({ ad, isWhatsApp }: AdFooterProps) {
   return (
     <div className="bg-[#2f3031] px-4 py-3 flex justify-between items-center hover:bg-[#3a3b3c] transition duration-200 cursor-pointer group">
       <div className="flex-1 min-w-0 pr-4 text-left">
@@ -67,11 +76,15 @@ function AdFooter({ ad, isWhatsApp }) {
   );
 }
 
-function SingleMediaAd({ ad }) {
+interface SingleMediaAdProps {
+  ad: MetaAd;
+}
+
+function SingleMediaAd({ ad }: SingleMediaAdProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [progress, setProgress] = useState(0);
-  const videoRef = useState(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -83,20 +96,22 @@ function SingleMediaAd({ ad }) {
     }
   };
 
-  const toggleMute = (e) => {
+  const toggleMute = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (!videoRef.current) return;
     videoRef.current.muted = !videoRef.current.muted;
     setIsMuted(videoRef.current.muted);
   };
 
-  useState(() => {
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
     const handleTimeUpdate = () => {
       const currentProgress = (video.currentTime / video.duration) * 100;
       setProgress(isNaN(currentProgress) ? 0 : currentProgress);
     };
+
     video.addEventListener('timeupdate', handleTimeUpdate);
     return () => video.removeEventListener('timeupdate', handleTimeUpdate);
   }, []);
@@ -158,7 +173,11 @@ function SingleMediaAd({ ad }) {
   );
 }
 
-function SingleImageAd({ ad }) {
+interface SingleImageAdProps {
+  ad: MetaAd;
+}
+
+function SingleImageAd({ ad }: SingleImageAdProps) {
   const isWhatsApp = ad.ctaDomain?.toLowerCase().includes('whatsapp') || ad.ctaBtnText?.toLowerCase().includes('mensaje');
 
   return (
@@ -178,7 +197,11 @@ function SingleImageAd({ ad }) {
   );
 }
 
-function CarouselAd({ ad }) {
+interface CarouselAdProps {
+  ad: MetaAd;
+}
+
+function CarouselAd({ ad }: CarouselAdProps) {
   const cards = ad.carouselCards || [];
   const [scrollIndex, setScrollIndex] = useState(0);
   const visibleCards = 1.3;

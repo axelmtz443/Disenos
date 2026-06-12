@@ -1,4 +1,19 @@
-export const FEATURES = [
+import { ReactNode } from 'react';
+
+export interface Feature {
+  id: number;
+  title: string;
+  icon: string;
+  description: string;
+  metric: string;
+}
+
+export interface Stat {
+  value: string;
+  label: string;
+}
+
+export const FEATURES: Feature[] = [
   {
     id: 1,
     title: "Chatbots Inteligentes",
@@ -29,14 +44,14 @@ export const FEATURES = [
   }
 ];
 
-export const STATS = [
+export const STATS: Stat[] = [
   { value: "500+", label: "Automatizaciones activas" },
   { value: "12M+", label: "Mensajes procesados/mes" },
   { value: "98.5%", label: "Uptime garantizado" },
   { value: "< 2s", label: "Tiempo de respuesta" }
 ];
 
-export const ICONS = {
+const ICON_PATHS: Record<string, ReactNode> = {
   'message-bot': (
     <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.756-4.267a.903.903 0 01.865-.501c1.152-.086 2.294-.213 3.423-.379 1.584-.233 2.707-1.626 2.707-3.228V6.75c0-1.6-1.123-2.993-2.707-3.227A47.863 47.863 0 0012 3c-2.392 0-4.744.175-7.043.523C3.373 3.757 2.25 5.15 2.25 6.75v6.01z" />
   ),
@@ -51,10 +66,10 @@ export const ICONS = {
   )
 };
 
-export function getIcon(iconType) {
+export function getIcon(iconType: string): ReactNode {
   return (
     <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-      {ICONS[iconType] || ICONS['chart']}
+      {ICON_PATHS[iconType] || ICON_PATHS['chart']}
     </svg>
   );
 }

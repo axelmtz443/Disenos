@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { COLORS, FONTS } from '../lib/utils';
-import { FEATURES, STATS, getIcon } from '../data/automationData.jsx';
+import { FEATURES, STATS, getIcon } from '../data/automationData';
 
 export default function AutomationSection() {
-  const [activeFeature, setActiveFeature] = useState(0);
+  const [activeFeature, setActiveFeature] = useState<number>(0);
 
   return (
     <section id="automatizacion" className="relative min-h-screen py-24 bg-[#0a0a0a] overflow-hidden">

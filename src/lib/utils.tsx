@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 
 // Theme colors used across the app
 export const COLORS = {
@@ -7,18 +7,25 @@ export const COLORS = {
   audiovisual: '#599ddf',
   influencer: '#e6af41',
   automation: '#80b67d',
-};
+} as const;
 
 // Fonts
 export const FONTS = {
   heading: "'Astonpoliz', sans-serif",
   body: "'Montserrat', sans-serif",
-};
+} as const;
+
+interface ImageWithFallbackProps {
+  src: string;
+  fallback: string;
+  alt: string;
+  className?: string;
+}
 
 // Reusable image component with fallback
-export function ImageWithFallback({ src, fallback, alt, className }) {
-  const [imgSrc, setImgSrc] = useState(src);
-  const [hasFailed, setHasFailed] = useState(false);
+export function ImageWithFallback({ src, fallback, alt, className }: ImageWithFallbackProps) {
+  const [imgSrc, setImgSrc] = useState<string>(src);
+  const [hasFailed, setHasFailed] = useState<boolean>(false);
 
   return (
     <img
@@ -35,9 +42,14 @@ export function ImageWithFallback({ src, fallback, alt, className }) {
   );
 }
 
+interface ExpandableTextProps {
+  text: string;
+  maxLength?: number;
+}
+
 // Expandable text with "Ver más" toggle
-export function ExpandableText({ text, maxLength = 135 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+export function ExpandableText({ text, maxLength = 135 }: ExpandableTextProps) {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const isLong = text.length > maxLength;
   const displayText = isExpanded || !isLong ? text : text.substring(0, maxLength).trim() + '...';
 

@@ -1,4 +1,18 @@
-export const PROJECTS = [
+export interface ProjectStats {
+  views: string;
+  engagement: string;
+}
+
+export interface Project {
+  id: number;
+  title: string;
+  client: string;
+  thumbnail: string;
+  videoUrl: string;
+  stats: ProjectStats;
+}
+
+export const PROJECTS: Project[] = [
   {
     id: 1,
     title: "Campaña de Lanzamiento EQC",

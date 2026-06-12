@@ -1,4 +1,46 @@
-export const ADS_DATABASE = [
+export type GoogleAdType = 'search' | 'display' | 'shopping' | 'video';
+
+export interface GoogleActionExtension {
+  title: string;
+  subtitle: string;
+}
+
+export interface GoogleShoppingProduct {
+  image: string;
+  title: string;
+  price: string;
+  store: string;
+  promo?: string;
+  rating?: number;
+  reviews?: number;
+}
+
+export interface GoogleAd {
+  id: string;
+  type: GoogleAdType;
+  title: string;
+  pageLogo?: string;
+  pageName?: string;
+  displayUrl?: string;
+  description?: string;
+  whatsappAction?: GoogleActionExtension;
+  stackedSitelinks?: string[];
+  tags?: string[];
+  formExtension?: GoogleActionExtension;
+  displayBgColor?: string;
+  displaySubtext?: string;
+  displayImageUrl?: string;
+  ctaText?: string;
+  finePrint?: string;
+  products?: GoogleShoppingProduct[];
+  videoThumbnail?: string;
+  duration?: string;
+  channelName?: string;
+  views?: string;
+  sponsorLabel?: string;
+}
+
+export const ADS_DATABASE: GoogleAd[] = [
   {
     id: "search-alteso",
     type: "search",

@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { ImageWithFallback, COLORS, FONTS } from '../lib/utils';
-import { ADS_DATABASE } from '../data/googleData';
+import { ADS_DATABASE, GoogleAd } from '../data/googleData';
 
-function GoogleSearchAd({ ad }) {
+interface GoogleSearchAdProps {
+  ad: GoogleAd;
+}
+
+function GoogleSearchAd({ ad }: GoogleSearchAdProps) {
   const dummySearchQuery = ad.tags?.[0] || ad.title.split('-')[0].trim() || ad.pageName;
 
   return (
@@ -124,7 +128,7 @@ function GoogleSearchAd({ ad }) {
   );
 }
 
-function GoogleShoppingAd({ ad }) {
+function GoogleShoppingAd({ ad }: GoogleSearchAdProps) {
   const dummySearchQuery = ad.products?.[0]?.title.split(' ').slice(0, 3).join(' ') || "comprar en línea";
 
   return (
@@ -221,7 +225,7 @@ function GoogleShoppingAd({ ad }) {
   );
 }
 
-function GoogleVideoAd({ ad }) {
+function GoogleVideoAd({ ad }: GoogleSearchAdProps) {
   const dummySearchQuery = "Mejorar mis ventas";
 
   return (
@@ -296,7 +300,7 @@ function GoogleVideoAd({ ad }) {
   );
 }
 
-function GoogleDisplayAd({ ad }) {
+function GoogleDisplayAd({ ad }: GoogleSearchAdProps) {
   return (
     <div className="flex flex-col items-center w-full">
       <div className="text-center mb-6 px-4">
@@ -360,8 +364,18 @@ function GoogleDisplayAd({ ad }) {
   );
 }
 
+function renderAdComponent(ad: GoogleAd) {
+  switch(ad.type) {
+    case 'shopping': return <GoogleShoppingAd ad={ad} />;
+    case 'video': return <GoogleVideoAd ad={ad} />;
+    case 'display': return <GoogleDisplayAd ad={ad} />;
+    case 'search':
+    default: return <GoogleSearchAd ad={ad} />;
+  }
+}
+
 export default function GoogleSection() {
-  const [activeAdIndex, setActiveAdIndex] = useState(0);
+  const [activeAdIndex, setActiveAdIndex] = useState<number>(0);
   const totalAds = ADS_DATABASE.length;
 
   const handleNextAd = () => setActiveAdIndex((prev) => (prev < totalAds - 1 ? prev + 1 : 0));
@@ -370,16 +384,6 @@ export default function GoogleSection() {
   const cardWidth = 550;
   const cardMargin = 48;
   const totalItemWidth = cardWidth + cardMargin;
-
-  const renderAdComponent = (ad) => {
-    switch(ad.type) {
-      case 'shopping': return <GoogleShoppingAd ad={ad} />;
-      case 'video': return <GoogleVideoAd ad={ad} />;
-      case 'display': return <GoogleDisplayAd ad={ad} />;
-      case 'search':
-      default: return <GoogleSearchAd ad={ad} />;
-    }
-  };
 
   return (
     <section id="google-ads" className="min-h-screen bg-[#0a0a0a] text-zinc-100 flex flex-col md:flex-row items-stretch overflow-hidden font-sans selection:bg-blue-600 selection:text-white">

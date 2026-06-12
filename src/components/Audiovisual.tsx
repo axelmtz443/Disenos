@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { COLORS, FONTS } from '../lib/utils';
-import { PROJECTS } from '../data/audiovisualData';
+import { PROJECTS, Project } from '../data/audiovisualData';
 
 export default function AudiovisualSection() {
-  const [activeProject, setActiveProject] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = useRef(null);
+  const [activeProject, setActiveProject] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setIsPlaying(false);
@@ -30,7 +30,7 @@ export default function AudiovisualSection() {
   const handlePauseEvent = () => setIsPlaying(false);
   const handlePlayEvent = () => setIsPlaying(true);
 
-  const currentProject = PROJECTS[activeProject];
+  const currentProject: Project = PROJECTS[activeProject];
 
   return (
     <section id="audiovisual" className="relative min-h-screen py-24 bg-[#0a0a0a] overflow-hidden">

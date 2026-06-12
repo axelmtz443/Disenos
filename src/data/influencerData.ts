@@ -1,4 +1,15 @@
-export const CAMPAIGNS = [
+export interface Campaign {
+  id: number;
+  influencer: string;
+  handle: string;
+  followers: string;
+  niche: string;
+  profilePic: string;
+  roi: string;
+  engagement: string;
+}
+
+export const CAMPAIGNS: Campaign[] = [
   {
     id: 1,
     influencer: "María González",
