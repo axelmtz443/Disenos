@@ -7,6 +7,8 @@ interface Particle {
   speedX: number;
   speedY: number;
   color: string;
+  update: (canvasWidth: number, canvasHeight: number) => void;
+  draw: () => void;
 }
 
 const InteractiveBackground = () => {

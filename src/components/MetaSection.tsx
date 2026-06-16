@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ImageWithFallback, ExpandableText, SocialActions, COLORS, FONTS } from '../lib/utils';
+import { ImageWithFallback, ExpandableText, SocialActions, FONTS } from '../lib/utils';
 
 // Data and types moved from metaData.ts
 interface CarouselCard {

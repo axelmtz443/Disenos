@@ -1,30 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { 
-  TrendingUp,
-  PieChart,
-  LineChart,
-  Target,
-  Trophy,
-  ArrowRight,
-  Calendar
-} from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { TrendingUp, ChartPie as PieChart, ChartLine as LineChart, Target, Trophy, ArrowRight, Calendar } from 'lucide-react';
 
 const FONTS = {
   heading: "'Astonpoliz', sans-serif",
   body: "'Montserrat', sans-serif",
 };
 
-const ImageWithFallback = ({ src, fallback, alt, className }) => {
-  const [imgSrc, setImgSrc] = useState(src || fallback);
-  return (
-    <img 
-      src={imgSrc} 
-      alt={alt} 
-      className={className} 
-      onError={() => setImgSrc(fallback)}
-    />
-  );
-};
 // =========================================================================
 
 
@@ -127,7 +108,7 @@ const WepromLogo = () => (
 
 const OrbitalSystem = () => {
   const [angle, setAngle] = useState(0);
-  const requestRef = useRef();
+  const requestRef = useRef<number | null>(null);
 
   const differentiators = [
     { 
@@ -164,7 +145,11 @@ const OrbitalSystem = () => {
       requestRef.current = requestAnimationFrame(animate);
     };
     requestRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(requestRef.current);
+    return () => {
+      if (requestRef.current !== null) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   // Adaptando radios de órbita estática

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, ReactNode } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { COLORS, FONTS } from '../lib/utils';
 
 // Data and types moved from audiovisualData.ts
