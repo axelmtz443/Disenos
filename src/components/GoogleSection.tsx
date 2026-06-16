@@ -418,17 +418,17 @@ export default function GoogleSection() {
         </div>
       </div>
 
-      <div className="w-full md:w-1/3 p-8 lg:p-14 flex flex-col justify-center items-center text-center min-h-[40vh] md:min-h-screen">
-        <div className="w-full max-w-sm flex flex-col items-center">
+      <div className="w-full md:w-1/3 p-8 lg:p-14 flex flex-col justify-start items-start text-left pt-16 min-h-[40vh] md:min-h-screen">
+        <div className="w-full max-w-sm flex flex-col items-start">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-3 leading-[1.1]" style={{ fontFamily: FONTS.heading }}>
             Publicidad en <br/>
             <span className="text-[#1a73e8]">Google Ads</span>
           </h1>
-          <p className="text-base md:text-lg text-zinc-400 leading-relaxed font-light mb-8 max-w-xs mx-auto">
+          <p className="text-base md:text-lg text-zinc-400 leading-relaxed font-light mb-8 max-w-xs">
             Dominamos la red publicitaria más grande del mundo. <strong className="text-white font-medium">Búsqueda, Shopping, YouTube, Display</strong> y más en una sola estrategia.
           </p>
           <span className="text-xs font-bold text-[#1a73e8] tracking-[0.2em] uppercase mb-4">Omnicanalidad Precisa</span>
-          <div className="flex flex-wrap items-center justify-center gap-5 text-zinc-500">
+          <div className="flex flex-wrap items-center justify-start gap-5 text-zinc-500">
             <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1212.41 1236.32"><path d="M1015.9,719.96h-398.11v-205.09h580.57c7.22,13.06,8.98,34.1,10.52,49.8,40.24,408.3-269.78,724.91-682.25,664.16C41.19,1157.32-171.7,565.61,160.84,201.17c229.02-250.99,621.94-270.06,873.11-40.67l-146.19,145.73c-62.8-52.61-143.74-91.07-226.28-98.93C274.66,170.44,52.64,637.06,326.77,909.95c225.13,224.11,612.62,115.2,689.13-189.99Z"/></svg>
             <svg className="w-6 h-6 hover:text-[#ff0000] transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             <svg className="w-6 h-6 hover:text-white transition-colors cursor-pointer" fill="currentColor" viewBox="0 0 1293 1196.13"><path d="M649.38,752.65c-6.8-1.47-4.67.89-6.5,3.75-69,107.43-123.35,230.17-193.71,337.57-198.06,243.06-563.3,12.75-414.38-277.16,123.61-240.65,280.77-473.24,408.42-712.7,96.41-138.05,305.18-138.38,404.25-3.5,128.73,240.38,286.54,474.37,410.76,716.2,148.88,289.84-216.27,520.28-414.39,277.17l-194.45-341.33ZM421.67,349.73l-204.35,350.32c106.98-15.92,215.84,47.91,258.37,145.99l112.3-194.1c-47.9-93.43-104.88-181.9-155.12-273.97-4.72-8.64-10.5-18.2-11.2-28.24Z"/></svg>
