@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react';
+import { useState } from 'react';
 
 // Theme colors used across the app
 export const COLORS = {
