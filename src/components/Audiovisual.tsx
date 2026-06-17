@@ -74,17 +74,19 @@ export default function AudiovisualSection() {
   const currentProject: Project = PROJECTS[activeProject];
 
   return (
-    <section id="audiovisual" className="relative min-h-screen py-24 overflow-hidden">
+    <section id="audiovisual" className="relative min-h-screen flex flex-col justify-between py-12 md:py-20 overflow-hidden border-t border-zinc-900/40">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="mb-12">
-          <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase mb-3 opacity-90" style={{ color: COLORS.audiovisual }}>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
+        <div className="mb-12 md:mb-16">
+          <span className="text-xs font-bold tracking-[0.25em] uppercase mb-3 block" style={{ color: COLORS.audiovisual }}>
             Contenido que posiciona, conecta y convierte
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight" style={{ fontFamily: FONTS.heading }}>
-            Producción Audiovisual
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-2 leading-[1.1]" style={{ fontFamily: FONTS.heading }}>
+            Producción <br/>
+            <span style={{ color: COLORS.audiovisual }}>Audiovisual</span>
           </h2>
-          <p className="text-lg text-zinc-400 max-w-2xl leading-relaxed" style={{ fontFamily: FONTS.body }}>
+          <p className="max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed font-light" style={{ fontFamily: FONTS.body }}>
             Conceptos creativos desarrollados para atraer clientes
           </p>
         </div>
@@ -152,6 +154,16 @@ export default function AudiovisualSection() {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="w-full flex justify-center mt-12 mb-4 relative z-10">
+        <a
+          href="#contacto"
+          className="inline-flex items-center justify-center px-10 py-4 text-lg font-bold text-white rounded-full hover:scale-105 transition-all duration-300"
+          style={{ backgroundColor: COLORS.audiovisual, boxShadow: `0 0 20px rgba(89,157,223,0.3)` }}
+        >
+          Cotizar producción
+        </a>
       </div>
     </section>
   );

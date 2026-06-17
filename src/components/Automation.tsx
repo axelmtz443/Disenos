@@ -80,17 +80,19 @@ export default function AutomationSection() {
   const [activeFeature, setActiveFeature] = useState<number>(0);
 
   return (
-    <section id="automatizacion" className="relative min-h-screen py-24 overflow-hidden">
+    <section id="automatizacion" className="relative min-h-screen flex flex-col justify-between py-12 md:py-20 overflow-hidden border-t border-zinc-900/40">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="mb-12">
-          <span className="inline-block text-xs font-bold tracking-[0.25em] uppercase mb-3 opacity-90" style={{ color: COLORS.automation }}>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
+        <div className="mb-12 md:mb-16">
+          <span className="text-xs font-bold tracking-[0.25em] uppercase mb-3 block" style={{ color: COLORS.automation }}>
             Procesos más rápidos, menos operación manual
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight" style={{ fontFamily: FONTS.heading }}>
-            Automatización con IA
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-2 leading-[1.1]" style={{ fontFamily: FONTS.heading }}>
+            Automatización <br/>
+            <span style={{ color: COLORS.automation }}>con Inteligencia Artificial</span>
           </h2>
-          <p className="text-lg text-zinc-400 max-w-2xl leading-relaxed" style={{ fontFamily: FONTS.body }}>
+          <p className="max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed font-light" style={{ fontFamily: FONTS.body }}>
             Herramientas trabajando mientras tú te enfocas en crecer
           </p>
         </div>
@@ -140,14 +142,24 @@ export default function AutomationSection() {
           </div>
         </div>
 
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
           {STATS.map((stat, idx) => (
-            <div key={idx} className="text-center p-6 bg-zinc-900/60 backdrop-blur-sm rounded-xl border border-zinc-700/50">
-              <p className="text-3xl lg:text-4xl font-bold text-white mb-2" style={{ fontFamily: FONTS.heading }}>{stat.value}</p>
+            <div key={idx} className="text-center p-6 rounded-2xl border border-zinc-700/50 bg-zinc-900/60 backdrop-blur-sm">
+              <p className="text-3xl lg:text-4xl font-bold mb-1" style={{ fontFamily: FONTS.heading, color: COLORS.automation }}>{stat.value}</p>
               <p className="text-sm text-zinc-500" style={{ fontFamily: FONTS.body }}>{stat.label}</p>
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="w-full flex justify-center mt-12 mb-4 relative z-10">
+        <a
+          href="#contacto"
+          className="inline-flex items-center justify-center px-10 py-4 text-lg font-bold text-black rounded-full hover:scale-105 transition-all duration-300"
+          style={{ backgroundColor: COLORS.automation, boxShadow: `0 0 20px rgba(128,182,125,0.3)` }}
+        >
+          Automatizar mi negocio
+        </a>
       </div>
     </section>
   );

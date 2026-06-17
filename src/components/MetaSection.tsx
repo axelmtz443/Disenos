@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ImageWithFallback, ExpandableText, SocialActions, FONTS } from '../lib/utils';
+import { ImageWithFallback, ExpandableText, SocialActions, DraggableCarousel, FONTS } from '../lib/utils';
 
 interface CarouselCard {
   image: string;
@@ -148,6 +148,23 @@ const ADS_DATABASE: MetaAd[] = [
   }
 ];
 
+function PlatformLabel({ label, color, isGradient }: { label: string; color: string; isGradient?: boolean }) {
+  return (
+    <div className="px-3 py-1.5 flex items-center gap-1.5 border-b border-white/5">
+      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: isGradient ? color : color }} />
+      <span
+        className="text-[10px] font-bold tracking-[0.15em] uppercase"
+        style={isGradient
+          ? { backgroundImage: color, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }
+          : { color }
+        }
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
 interface AdHeaderProps {
   ad: MetaAd;
 }
@@ -261,13 +278,14 @@ function SingleMediaAd({ ad }: SingleMediaAdProps) {
   const isWhatsApp = ad.ctaDomain?.toLowerCase().includes('whatsapp') || ad.ctaBtnText?.toLowerCase().includes('mensaje');
 
   return (
-    <div className="w-[420px] max-w-[90vw] bg-[#242526]/95 backdrop-blur-sm rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] border border-zinc-700/50 overflow-hidden font-sans flex-shrink-0 self-start transition-all duration-300 relative">
+    <div className="w-full bg-[#242526]/95 backdrop-blur-sm rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] border border-zinc-700/50 overflow-hidden font-sans flex-shrink-0 h-full flex flex-col transition-all duration-300">
+      <PlatformLabel label="Facebook Ads" color="#0866ff" />
       <AdHeader ad={ad} />
-      <ExpandableText text={ad.mainText} />
-      <div className="relative bg-black/50 group overflow-hidden border-y border-zinc-700/50 w-full flex items-center justify-center">
+      <ExpandableText text={ad.mainText} maxLength={300} />
+      <div className="relative bg-black/50 group overflow-hidden border-y border-zinc-700/50 w-full flex items-center justify-center flex-1 min-h-0">
         {ad.videoUrl ? (
           <>
-            <video ref={videoRef} className="w-full h-auto max-h-[550px] object-contain cursor-pointer block" playsInline loop muted={isMuted} onClick={togglePlay} preload="metadata">
+            <video ref={videoRef} className="w-full h-full object-contain cursor-pointer block" playsInline loop muted={isMuted} onClick={togglePlay} preload="metadata">
               <source src={`${ad.videoUrl}#t=0.001`} type="video/mp4" />
             </video>
             {!isPlaying && (
@@ -307,12 +325,13 @@ function SingleImageAd({ ad }: SingleImageAdProps) {
   const isWhatsApp = ad.ctaDomain?.toLowerCase().includes('whatsapp') || ad.ctaBtnText?.toLowerCase().includes('mensaje');
 
   return (
-    <div className="w-[420px] max-w-[90vw] bg-[#242526]/95 backdrop-blur-sm rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] border border-zinc-700/50 overflow-hidden font-sans flex-shrink-0 self-start transition-all duration-300 relative">
+    <div className="w-full bg-[#242526]/95 backdrop-blur-sm rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] border border-zinc-700/50 overflow-hidden font-sans flex-shrink-0 h-full flex flex-col transition-all duration-300">
+      <PlatformLabel label="Facebook Ads" color="#0866ff" />
       <AdHeader ad={ad} />
-      <ExpandableText text={ad.mainText} />
-      <div className="relative bg-black/50 overflow-hidden border-y border-zinc-700/50 w-full flex items-center justify-center">
+      <ExpandableText text={ad.mainText} maxLength={300} />
+      <div className="relative bg-black/50 overflow-hidden border-y border-zinc-700/50 w-full flex items-center justify-center flex-1 min-h-0">
         {ad.imageUrl ? (
-          <ImageWithFallback src={ad.imageUrl} fallback={ad.imageFallback || ''} alt={ad.ctaTitle} className="w-full h-auto max-h-[550px] object-contain block" />
+          <ImageWithFallback src={ad.imageUrl} fallback={ad.imageFallback || ''} alt={ad.ctaTitle} className="w-full h-full object-contain block" />
         ) : (
           <div className="w-full h-[240px] bg-[#18191a]" />
         )}
@@ -334,10 +353,11 @@ function CarouselAd({ ad }: CarouselAdProps) {
   const maxIndex = Math.max(0, cards.length - 1);
 
   return (
-    <div className="w-[420px] max-w-[90vw] bg-[#242526]/95 backdrop-blur-sm rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] border border-zinc-700/50 overflow-hidden font-sans flex-shrink-0 self-start transition-all duration-300 relative">
+    <div className="w-full bg-[#242526]/95 backdrop-blur-sm rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.5)] border border-zinc-700/50 overflow-hidden font-sans flex-shrink-0 h-full flex flex-col transition-all duration-300">
+      <PlatformLabel label="Facebook Ads" color="#0866ff" />
       <AdHeader ad={ad} />
-      <ExpandableText text={ad.mainText} />
-      <div className="relative border-y border-zinc-700/50 bg-black/30 pt-3 pb-4 px-3 overflow-hidden">
+      <ExpandableText text={ad.mainText} maxLength={300} />
+      <div className="relative border-y border-zinc-700/50 bg-black/30 pt-3 pb-4 px-3 overflow-hidden flex-1 min-h-0">
         <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${scrollIndex * (100 / visibleCards)}%)` }}>
           {cards.map((card, idx) => (
             <div key={idx} className="w-[270px] flex-shrink-0 mr-3 bg-[#242526]/80 backdrop-blur-sm rounded-xl border border-zinc-700/50 overflow-hidden shadow-md flex flex-col group">
@@ -375,32 +395,418 @@ function CarouselAd({ ad }: CarouselAdProps) {
   );
 }
 
+// ── Instagram Carousel Ad ────────────────────────────────────────────────────
+function InstagramCarouselAd({ ad }: CarouselAdProps) {
+  const cards = ad.carouselCards || [];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [expanded, setExpanded] = useState(false);
+
+  const goTo = (idx: number) => setCurrentIndex(Math.max(0, Math.min(idx, cards.length - 1)));
+
+  const LIMIT = 120;
+  const isLong = ad.mainText.length > LIMIT;
+  const displayCaption = expanded || !isLong ? ad.mainText : ad.mainText.substring(0, LIMIT).trim() + '…';
+  const pageHandle = ad.pageName.split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g, '') + '_oficial';
+
+  return (
+    <div className="w-full bg-[#000] rounded-xl shadow-2xl border border-zinc-800/60 overflow-hidden font-sans flex-shrink-0 h-full flex flex-col">
+      <PlatformLabel label="Instagram · Carrusel" color="linear-gradient(90deg,#f9ce34,#ee2a7b,#6228d7)" isGradient />
+      {/* Header */}
+      <div className="px-3 py-2.5 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="p-[2px] rounded-full bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex-shrink-0">
+            <div className="w-8 h-8 rounded-full overflow-hidden border-[2px] border-black">
+              <ImageWithFallback
+                src={ad.pageLogo}
+                fallback={`https://ui-avatars.com/api/?name=${encodeURIComponent(ad.pageName)}&background=333&color=fff`}
+                alt={ad.pageName}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1">
+              <span className="text-white font-semibold text-[13px] truncate max-w-[180px]">{ad.pageName}</span>
+              <svg className="w-3 h-3 text-[#0095f6] flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1.177 14.28l-3.54-3.541 1.415-1.414 2.125 2.124 4.596-4.597 1.415 1.414-6.011 6.014z"/>
+              </svg>
+            </div>
+            <span className="text-zinc-400 text-[11px] block leading-none">Publicidad</span>
+          </div>
+        </div>
+        <button className="text-zinc-400 p-1 hover:text-white transition">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Carousel */}
+      <div className="relative w-full bg-zinc-900 overflow-hidden flex-1 min-h-0">
+        <div
+          className="flex h-full transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {cards.map((card, idx) => (
+            <div key={idx} className="w-full h-full flex-shrink-0">
+              <ImageWithFallback
+                src={card.image}
+                fallback={card.fallbackImage}
+                alt={card.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+
+        {currentIndex > 0 && (
+          <button
+            onClick={() => goTo(currentIndex - 1)}
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 flex items-center justify-center shadow-md hover:bg-white transition z-10"
+          >
+            <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
+            </svg>
+          </button>
+        )}
+        {currentIndex < cards.length - 1 && (
+          <button
+            onClick={() => goTo(currentIndex + 1)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 flex items-center justify-center shadow-md hover:bg-white transition z-10"
+          >
+            <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+            </svg>
+          </button>
+        )}
+
+        <div className="absolute top-3 right-3 bg-black/55 text-white text-[11px] font-semibold px-2 py-0.5 rounded-full backdrop-blur-sm">
+          {currentIndex + 1} / {cards.length}
+        </div>
+      </div>
+
+      {/* CTA section below image */}
+      <div className="bg-[#0a0a0a] border-b border-zinc-800/60 px-3 py-2.5 flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-wide block">{cards[currentIndex].domain}</span>
+          <span className="text-white text-[13px] font-semibold truncate block">{cards[currentIndex].title}</span>
+        </div>
+        <button className="flex-shrink-0 bg-[#0095f6] hover:bg-[#007acc] text-white font-bold text-[12px] px-4 py-1.5 rounded flex items-center gap-1.5 transition shadow whitespace-nowrap">
+          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.012 2.002c-5.51 0-9.99 4.48-9.99 9.99 0 1.763.458 3.483 1.332 5.006L2.013 22l5.12-1.341a9.957 9.957 0 004.879 1.343c5.51 0 9.99-4.48 9.99-9.99a9.986 9.986 0 00-10-9.99zm5.06 14.1c-.22.61-1.28 1.13-1.78 1.18-.48.05-.98.07-3.12-.76-2.73-1.06-4.47-3.85-4.61-4.04-.13-.19-1.11-1.48-1.11-2.82 0-1.34.7-2 1-2.29.23-.23.61-.35.97-.35.12 0 .23 0 .33.01.29.01.44.02.63.48.24.58.82 2 .9 2.15.08.15.13.33.03.53-.1.2-.21.33-.37.52-.16.19-.34.42-.48.56-.16.16-.33.34-.14.67.19.32.85 1.41 1.83 2.28 1.26 1.13 2.32 1.48 2.65 1.65.3.15.48.13.66-.08.19-.23.82-.95 1.04-1.28.22-.33.44-.28.74-.17.3.11 1.91.9 2.24 1.07.33.16.55.24.63.38.08.14.08.82-.14 1.43z"/>
+          </svg>
+          {cards[currentIndex].ctaText}
+        </button>
+      </div>
+
+      {/* Dot indicators */}
+      <div className="flex justify-center gap-1.5 pt-2 pb-0.5">
+        {cards.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goTo(idx)}
+            className={`rounded-full transition-all duration-200 ${idx === currentIndex ? 'w-2 h-2 bg-[#0095f6]' : 'w-1.5 h-1.5 bg-zinc-600 hover:bg-zinc-400'}`}
+          />
+        ))}
+      </div>
+
+      {/* IG Actions */}
+      <div className="px-3 pt-1 pb-1 flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <button className="text-white hover:text-zinc-400 transition p-1.5">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+            </svg>
+          </button>
+          <button className="text-white hover:text-zinc-400 transition p-1.5">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/>
+            </svg>
+          </button>
+          <button className="text-white hover:text-zinc-400 transition p-1.5">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
+            </svg>
+          </button>
+        </div>
+        <button className="text-white hover:text-zinc-400 transition p-1.5">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Caption */}
+      <div className="px-3 pb-4 text-left">
+        <p className="text-white text-[13px] leading-snug whitespace-pre-wrap">
+          <span className="font-semibold">{pageHandle} </span>
+          {displayCaption}
+          {isLong && !expanded && (
+            <button onClick={() => setExpanded(true)} className="text-zinc-400 text-[13px] ml-0.5">más</button>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── LinkedIn Ad ───────────────────────────────────────────────────────────────
+function LinkedInAd({ ad }: SingleImageAdProps) {
+  const [expanded, setExpanded] = useState(false);
+  const LIMIT = 200;
+  const isLong = ad.mainText.length > LIMIT;
+  const displayText = expanded || !isLong ? ad.mainText : ad.mainText.substring(0, LIMIT).trim() + '…';
+
+  return (
+    <div className="w-full bg-[#1b1f23] rounded-lg shadow-xl border border-[#283039] overflow-hidden font-sans flex-shrink-0 h-full flex flex-col">
+      <PlatformLabel label="LinkedIn" color="#0a66c2" />
+      {/* Header */}
+      <div className="p-4 flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 flex-1 min-w-0">
+          <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 border border-zinc-700/60">
+            <ImageWithFallback
+              src={ad.pageLogo}
+              fallback={`https://ui-avatars.com/api/?name=${encodeURIComponent(ad.pageName)}&background=0a66c2&color=fff`}
+              alt={ad.pageName}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-white font-semibold text-[15px] leading-tight block">{ad.pageName}</span>
+            <span className="text-zinc-400 text-[12px] block">Uniformes corporativos · 500+ seguidores</span>
+            <div className="flex items-center gap-1 mt-0.5">
+              <span className="text-zinc-500 text-[11px]">Promocionado</span>
+              <span className="text-zinc-600 text-[10px]">·</span>
+              <svg className="w-3 h-3 text-zinc-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-4v-4H7l5-7 5 7h-4v4h-2z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button className="flex-shrink-0 border border-[#0a66c2] text-[#0a66c2] px-4 py-1.5 rounded-full text-[13px] font-bold hover:bg-[#0a66c2]/10 transition flex items-center gap-1 whitespace-nowrap">
+          <span className="text-base leading-none">+</span>
+          <span>Seguir</span>
+        </button>
+      </div>
+
+      {/* Post text */}
+      <div className="px-4 pb-3 text-[14px] text-zinc-200 text-left leading-relaxed whitespace-pre-wrap">
+        {displayText}
+        {isLong && !expanded && (
+          <button onClick={() => setExpanded(true)} className="text-[#0a66c2] font-medium ml-1">…ver más</button>
+        )}
+      </div>
+
+      {/* Image */}
+      <div className="flex-1 min-h-0 bg-zinc-900 overflow-hidden">
+        <ImageWithFallback
+          src={ad.imageUrl || ''}
+          fallback={ad.imageFallback || ''}
+          alt={ad.ctaTitle}
+          className="w-full h-full object-cover block"
+        />
+      </div>
+
+      {/* CTA card */}
+      <div className="mx-3 mt-3 rounded border border-[#38434f] bg-[#283039] p-3 flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <span className="text-white text-[14px] font-semibold block truncate">{ad.ctaTitle}</span>
+          <span className="text-zinc-400 text-[12px] block">{ad.ctaDesc}</span>
+        </div>
+        <button className="flex-shrink-0 border border-[#0a66c2] text-[#0a66c2] px-4 py-1.5 rounded text-[13px] font-bold hover:bg-[#0a66c2]/10 transition whitespace-nowrap">
+          {ad.ctaBtnText}
+        </button>
+      </div>
+
+      {/* Social proof */}
+      <div className="px-4 pt-3 pb-2 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <div className="flex -space-x-0.5">
+            <span className="w-4 h-4 rounded-full bg-[#0a66c2] flex items-center justify-center text-[8px] border border-[#1b1f23]">👍</span>
+            <span className="w-4 h-4 rounded-full bg-[#df704d] flex items-center justify-center text-[8px] border border-[#1b1f23]">❤️</span>
+          </div>
+          <span className="text-zinc-400 text-[12px]">127</span>
+        </div>
+        <div className="flex items-center gap-2 text-zinc-400 text-[12px]">
+          <span>28 comentarios</span>
+          <span>·</span>
+          <span>12 reenvíos</span>
+        </div>
+      </div>
+
+      <div className="mx-4 border-t border-[#38434f]" />
+
+      {/* Actions */}
+      <div className="px-2 py-1 flex items-center">
+        {[
+          { label: 'Recomendar', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg> },
+          { label: 'Comentar', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/></svg> },
+          { label: 'Repostear', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg> },
+          { label: 'Enviar', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg> },
+        ].map(({ label, icon }) => (
+          <button key={label} className="flex-1 flex flex-col items-center gap-0.5 py-2 rounded hover:bg-[#283039] transition text-zinc-400 hover:text-white group">
+            <span className="group-hover:text-white transition">{icon}</span>
+            <span className="text-[11px] font-medium">{label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Instagram Reel Ad ────────────────────────────────────────────────────────
+function InstagramReelAd({ ad }: SingleMediaAdProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) { videoRef.current.pause(); setIsPlaying(false); }
+    else { videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {}); }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+    videoRef.current.muted = !videoRef.current.muted;
+    setIsMuted(videoRef.current.muted);
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const onTime = () => setProgress((video.currentTime / video.duration) * 100 || 0);
+    video.addEventListener('timeupdate', onTime);
+    return () => video.removeEventListener('timeupdate', onTime);
+  }, []);
+
+  return (
+    <div className="w-full bg-black rounded-xl shadow-2xl overflow-hidden font-sans border border-zinc-800/40 flex-shrink-0 h-full flex flex-col">
+      <PlatformLabel label="Instagram · Reels" color="linear-gradient(90deg,#f9ce34,#ee2a7b,#6228d7)" isGradient />
+      {/* Portrait video fills remaining height */}
+      <div className="relative bg-black overflow-hidden flex-1 min-h-0" onClick={togglePlay}>
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover cursor-pointer"
+          playsInline loop muted={isMuted} preload="metadata"
+        >
+          <source src={`${ad.videoUrl}#t=0.001`} type="video/mp4" />
+        </video>
+
+        {/* Gradients */}
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-52 bg-gradient-to-t from-black/85 to-transparent pointer-events-none" />
+
+        {/* Play button */}
+        {!isPlaying && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-14 h-14 rounded-full bg-black/40 flex items-center justify-center backdrop-blur-sm border border-white/20">
+              <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        )}
+
+        {/* Mute button */}
+        <button
+          onClick={toggleMute}
+          className="absolute top-3 right-3 w-7 h-7 rounded-full bg-black/40 flex items-center justify-center text-white backdrop-blur-sm border border-white/10 z-10"
+        >
+          {isMuted
+            ? <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM4 9v6h4l5 5V4L8 9H4zM19 12c0 2.97-1.75 5.51-4.25 6.64l1.42 1.42C19.34 18.33 21 15.35 21 12s-1.66-6.33-4.83-8.06l-1.42 1.42C17.25 6.49 19 9.03 19 12z"/></svg>
+            : <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L8 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+          }
+        </button>
+
+        {/* Right side actions */}
+        <div className="absolute right-2.5 bottom-28 flex flex-col items-center gap-4 z-10">
+          <div className="relative">
+            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+              <ImageWithFallback
+                src={ad.pageLogo}
+                fallback={`https://ui-avatars.com/api/?name=${encodeURIComponent(ad.pageName)}&background=333&color=fff`}
+                alt={ad.pageName}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#ee2a7b] flex items-center justify-center border border-black">
+              <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-0.5">
+            <button className="text-white p-1" onClick={e => e.stopPropagation()}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
+              </svg>
+            </button>
+            <span className="text-white text-[10px] font-semibold">2.4k</span>
+          </div>
+          <div className="flex flex-col items-center gap-0.5">
+            <button className="text-white p-1" onClick={e => e.stopPropagation()}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/>
+              </svg>
+            </button>
+            <span className="text-white text-[10px] font-semibold">138</span>
+          </div>
+          <div className="flex flex-col items-center gap-0.5">
+            <button className="text-white p-1" onClick={e => e.stopPropagation()}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
+              </svg>
+            </button>
+            <span className="text-white text-[10px] font-semibold">Enviar</span>
+          </div>
+          <button className="text-white p-1" onClick={e => e.stopPropagation()}>
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Bottom info */}
+        <div className="absolute bottom-5 left-3 right-14 space-y-1.5 z-10">
+          <div className="flex items-center gap-1.5">
+            <span className="text-white font-bold text-[12px]">{ad.pageName}</span>
+            <span className="text-zinc-300 text-[10px]">· Publicidad</span>
+          </div>
+          <p className="text-white text-[11px] leading-snug line-clamp-2 opacity-90">
+            {ad.mainText.split('\n')[0]}
+          </p>
+          <button className="bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold text-[11px] px-3 py-1 rounded-full hover:bg-white/30 transition">
+            {ad.ctaBtnText}
+          </button>
+          <div className="flex items-center gap-1.5 pt-0.5">
+            <svg className="w-3 h-3 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3v9.28a4 4 0 00-1-.28 4 4 0 100 8 4 4 0 004-4V7h4V3h-7z"/>
+            </svg>
+            <span className="text-white text-[10px] truncate opacity-80">Audio original · {ad.pageName}</span>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/20 z-10">
+          <div className="h-full bg-white transition-all duration-100" style={{ width: `${progress}%` }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MetaSection() {
   return (
     <section id="redes-sociales" className="relative min-h-screen bg-[#07070800] flex flex-col justify-between py-12 md:py-20 overflow-x-hidden border-t border-zinc-900/40">
       
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes infinite-scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-infinite-scroll {
-          animation: infinite-scroll 45s linear infinite;
-        }
-        .animate-infinite-scroll:hover {
-          animation-play-state: paused;
-        }
-      `}} />
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(8,102,255,0.12),transparent_45%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(140,82,255,0.08),transparent_40%)] pointer-events-none" />
 
       {/* Contenedor Superior: Texto alineado a la izquierda */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-start gap-6 mb-10 md:mb-16">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-2 leading-[1.1]" style={{ fontFamily: FONTS.heading }}>
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-start gap-4 mb-10 md:mb-16">
+        <span className="text-xs font-bold tracking-[0.25em] uppercase text-[#0866ff]">Alcance masivo y segmentación precisa</span>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-2 leading-[1.1]" style={{ fontFamily: FONTS.heading }}>
           Publicidad en <br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0866ff] to-[#00c6ff]">Redes Sociales</span>
-        </h1>
+        </h2>
         <p className="max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed font-light">
           Llega a quien sí te va a comprar. Campañas optimizadas para generar resultados de manera <strong className="text-white font-medium">precisa y escalable</strong>.
         </p>
@@ -428,8 +834,6 @@ export default function MetaSection() {
               <path d="M382.89,250c0,71.56-58.01,129.57-129.57,129.57s-129.57-58.01-129.57-129.57,58.01-129.57,129.57-129.57,129.57,58.01,129.57,129.57ZM337.11,250.02c0-46.28-37.52-83.79-83.79-83.79s-83.79,37.52-83.79,83.79,37.52,83.79,83.79,83.79,83.79-37.52,83.79-83.79Z"/>
               <circle cx="387.76" cy="115.56" r="30.48"/>
             </svg>
-            <svg className="w-6 h-6 hover:text-[#25D366] transition-colors" fill="currentColor" viewBox="0 0 535.06 538.99">
-              <path d="M0,538.99l46.04-139.51C-44.8,245.96,38.67,45.92,213.18,6.67c193.53-43.52,363.71,132.82,312.74,324.74-43.57,164.06-232.38,244.14-381.41,161.99L0,538.99ZM68,471.99l82.51-25.89c134.74,87.45,316.14,6.69,338.32-152.77C511.47,130.55,352.54,1.39,197.48,56.97,60.94,105.92,9.56,273.47,93.99,391.54l-25.99,80.45Z"/></svg>
             <svg className="w-6 h-6 hover:text-[#106bff] transition-colors" fill="currentColor" viewBox="0 0 997.61 1037.17">
               <path d="M164.84,1037.17v-203.31C-159.21,547.76,25.68,42.95,448.51,2.38c338.84-32.51,630.68,273.05,528.34,611.12-77.6,256.35-358.42,392.33-612.98,326.77l-199.03,96.9ZM785.71,352.99l-212.69,116.47-122.09-121.31-244.7,260.46,219.99-121.35,119.67,128.64,239.82-262.91Z"/></svg>
             <svg className="w-6 h-6 hover:text-white transition-colors" fill="currentColor" viewBox="0 0 509.05 587.81">
@@ -440,44 +844,49 @@ export default function MetaSection() {
       </div>
       
 
-      {/* Contenedor Inferior: Carrusel Infinito */}
-      <div className="relative w-full overflow-hidden py-4 border-y border-zinc-900/0 bg-zinc-950/0">
-
-        <div className="flex w-max animate-infinite-scroll py-2 gap-8">
-          
-          {ADS_DATABASE.map((ad, idx) => (
-            <div 
-              key={`${ad.id}-scroll1-${idx}`} 
-              className="w-[420px] max-w-[85vw] flex-shrink-0 transition-transform duration-300 hover:scale-[1.02] cursor-default"
-            >
-              {ad.type === 'carousel' ? (
-                <CarouselAd ad={ad} />
-              ) : ad.type === 'single-image' ? (
-                <SingleImageAd ad={ad} />
-              ) : (
-                <SingleMediaAd ad={ad} />
-              )}
-            </div>
-          ))}
-
-          {ADS_DATABASE.map((ad, idx) => (
-            <div 
-              key={`${ad.id}-scroll2-dup-${idx}`} 
-              className="w-[420px] max-w-[85vw] flex-shrink-0 transition-transform duration-300 hover:scale-[1.02]"
-            >
-              {ad.type === 'carousel' ? (
-                <CarouselAd ad={ad} />
-              ) : ad.type === 'single-image' ? (
-                <SingleImageAd ad={ad} />
-              ) : (
-                <SingleMediaAd ad={ad} />
-              )}
-            </div>
-          ))}
-
-        </div>
-        
-      </div>
+      {/* Contenedor Inferior: Carrusel Arrastrable */}
+      <DraggableCarousel step={0.9}>
+        {ADS_DATABASE.map((ad, idx) => (
+          <div
+            key={`${ad.id}-scroll1-${idx}`}
+            className="w-[420px] max-w-[85vw] flex-shrink-0 h-[810px] flex flex-col"
+          >
+            {ad.id === 'andrea-aragon' ? (
+              <InstagramCarouselAd ad={ad} />
+            ) : ad.id === 'mayork-mx' ? (
+              <LinkedInAd ad={ad} />
+            ) : ad.id === 'ortopedia-justo-sierra' ? (
+              <InstagramReelAd ad={ad} />
+            ) : ad.type === 'carousel' ? (
+              <CarouselAd ad={ad} />
+            ) : ad.type === 'single-image' ? (
+              <SingleImageAd ad={ad} />
+            ) : (
+              <SingleMediaAd ad={ad} />
+            )}
+          </div>
+        ))}
+        {ADS_DATABASE.map((ad, idx) => (
+          <div
+            key={`${ad.id}-scroll2-dup-${idx}`}
+            className="w-[420px] max-w-[85vw] flex-shrink-0 h-[810px] flex flex-col"
+          >
+            {ad.id === 'andrea-aragon' ? (
+              <InstagramCarouselAd ad={ad} />
+            ) : ad.id === 'mayork-mx' ? (
+              <LinkedInAd ad={ad} />
+            ) : ad.id === 'ortopedia-justo-sierra' ? (
+              <InstagramReelAd ad={ad} />
+            ) : ad.type === 'carousel' ? (
+              <CarouselAd ad={ad} />
+            ) : ad.type === 'single-image' ? (
+              <SingleImageAd ad={ad} />
+            ) : (
+              <SingleMediaAd ad={ad} />
+            )}
+          </div>
+        ))}
+      </DraggableCarousel>
       <div className="w-full flex justify-center mt-12 mb-4 relative z-10">
         <a 
           href="#contacto" 

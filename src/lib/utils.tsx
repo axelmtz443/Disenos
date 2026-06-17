@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // Theme colors used across the app
 export const COLORS = {
@@ -72,6 +72,76 @@ export function ExpandableText({ text, maxLength = 135 }: ExpandableTextProps) {
           Ver menos
         </button>
       )}
+    </div>
+  );
+}
+
+interface DraggableCarouselProps {
+  children: React.ReactNode;
+  step?: number;
+}
+
+export function DraggableCarousel({ children, step = 0.8 }: DraggableCarouselProps) {
+  const outerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const s = useRef({ isDragging: false, startX: 0, translateX: 0, dragStart: 0, halfWidth: 0 });
+  const rafRef = useRef<number>();
+
+  useEffect(() => {
+    const state = s.current;
+    const tick = () => {
+      if (!state.isDragging && innerRef.current) {
+        if (!state.halfWidth && innerRef.current.scrollWidth > 0) {
+          state.halfWidth = innerRef.current.scrollWidth / 2;
+        }
+        if (state.halfWidth) {
+          state.translateX -= step;
+          if (-state.translateX >= state.halfWidth) state.translateX += state.halfWidth;
+          innerRef.current.style.transform = `translateX(${state.translateX}px)`;
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [step]);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if ((e.target as HTMLElement).closest('button,input,select,a,video')) return;
+    const state = s.current;
+    state.isDragging = true;
+    state.startX = e.clientX;
+    state.dragStart = state.translateX;
+    outerRef.current?.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    const state = s.current;
+    if (!state.isDragging || !innerRef.current) return;
+    const delta = e.clientX - state.startX;
+    state.translateX = state.dragStart + delta;
+    if (state.halfWidth) {
+      while (-state.translateX >= state.halfWidth) { state.translateX += state.halfWidth; state.dragStart += state.halfWidth; }
+      while (state.translateX > 0) { state.translateX -= state.halfWidth; state.dragStart -= state.halfWidth; }
+    }
+    innerRef.current.style.transform = `translateX(${state.translateX}px)`;
+  };
+
+  const onPointerUp = () => { s.current.isDragging = false; };
+
+  return (
+    <div
+      ref={outerRef}
+      className="relative w-full overflow-hidden py-4 cursor-grab active:cursor-grabbing select-none"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerLeave={onPointerUp}
+    >
+      <div ref={innerRef} className="flex gap-8 py-2 w-max will-change-transform">
+        {children}
+      </div>
     </div>
   );
 }

@@ -191,15 +191,12 @@ const OrbitalSystem = () => {
             }}
           >
             {/* Tarjeta Orbitante */}
-            <div className="bg-[#0c0d0e]/80 backdrop-blur-md border border-zinc-800/80 p-2 lg:p-3 rounded-xl shadow-2xl flex items-center gap-2.5 transition-all duration-300 group w-44 md:w-52 hover:bg-neutral-900/90 hover:border-zinc-700/80">
+            <div className="bg-[#0c0d0e]/80 backdrop-blur-md border border-zinc-800/80 p-2.5 lg:p-3 rounded-xl shadow-2xl flex items-center gap-2.5 transition-all duration-300 group w-44 md:w-48 hover:bg-neutral-900/90 hover:border-zinc-700/80">
               <div className="shrink-0 w-8 h-8 bg-zinc-800/50 rounded-lg flex items-center justify-center border border-zinc-700/20">
                 <Icon className="w-4 h-4 text-[#599ddf] drop-shadow-md" />
               </div>
-              <div className="flex flex-col w-full min-w-0 justify-center text-left">
-                <span className="font-bold text-neutral-100 text-[10px] md:text-xs leading-tight truncate">{diff.title}</span>
-                <span className="text-[9px] text-zinc-500 leading-tight mt-0.5 truncate group-hover:text-zinc-300 transition-colors">
-                  {diff.desc}
-                </span>
+              <div className="flex flex-col justify-center text-left">
+                <span className="font-bold text-neutral-100 text-[11px] md:text-xs leading-snug">{diff.title}</span>
               </div>
             </div>
           </div>
@@ -275,13 +272,13 @@ export default function App() {
           </h1>
           
           {/* Se cambió max-w-2xl a max-w-5xl para que el párrafo se extienda más a los lados */}
-          <p 
+          <p
             className="text-sm sm:text-base lg:text-lg text-zinc-400 leading-relaxed max-w-5xl mx-auto font-light"
             style={{ fontFamily: FONTS.body }}
           >
-            Más de 30 años trabajando con las grandes marcas nos han mostrado el camino al éxito. {' '}
+            Más de 30 años trabajando con las grandes marcas nos han mostrado el camino al éxito.{' '}
             <strong className="text-white font-semibold">
-              <p>Por eso sabemos como desarrollar a las pequeñas, consolidar a las medianas y expandir a las grandes.</p>
+              Por eso sabemos como desarrollar a las pequeñas, consolidar a las medianas y expandir a las grandes.
             </strong>
           </p>
         </div>
